@@ -1,0 +1,26 @@
+hsm {
+Main = MachineHeader "{" (Code | State)+ "}"
+
+Code = Proc | OtherCode
+
+Proc = "code" Name Body
+OtherCode = "code" Body
+Body =
+  | stuff? "{" Body "}" Body?  -- rec
+  | stuff                --bottom
+
+stuff = stuffchar+
+stuffchar = ~brace ~keyword any
+
+brace = "{" | "}"
+
+State = "state" Name "{" Transition+ "}"
+Transition = "on" Name Body
+
+MachineHeader = "machine" Name
+
+Name = ~keyword letter alnum+
+
+keyword = "code" | "state"
+}
+

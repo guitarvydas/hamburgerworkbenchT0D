@@ -1,0 +1,31 @@
+hsm {
+Machine = Header Decls State+
+Header = "#" "machine" Name
+
+Decls = "#" "#" verbatim+
+
+State = "#" "#" StateName Code* Transition*
+
+Transition =
+  | "#" "#" "#" TransitionName Code+
+
+Code =
+  | "_send_" Port verbatim -- send
+  | "_go_" Name -- proceedto
+  | "_next_" Name -- nextstate
+  | verbatim          -- raw
+  
+Port = Name
+
+verbatim =
+  | "❮" verbatim* "❯" -- rec
+  | stuff+            -- bottom
+
+stuff = ~vsep any | "_"
+  
+vsep = "❮" | "❯" | "#" | "_"
+Name = letter alnum*
+StateName = "*" "*" Name "*" "*"
+TransitionName = "*" Name "*"
+}
+

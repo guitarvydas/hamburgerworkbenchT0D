@@ -1,0 +1,4 @@
+Send [karrow Name Verbatim] = [[⟪this.send (${Name}, ${Verbatim});⟫]]
+Name [letter @alnum] = [[${letter}${alnum}]]
+verbatim_rec [t1 v t2] = [[${t1}${v}${t2}]]
+verbatim_bottom [@cs] = [[${cs}]]

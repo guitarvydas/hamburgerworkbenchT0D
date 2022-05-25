@@ -1,0 +1,23 @@
+Main [MachineHeader lb @x rb] = [[${MachineHeader}${lb}${x}${rb}]]
+
+Code [x] = [[${x}]]
+
+Proc [kcode Name Body] = [[${kcode}${Name}${Body}]]
+OtherCode [kcode Body] = [[${kcode}${Body}]]
+
+Body_rec [@stuff1 lb Body rb @stuff2] = [[${stuff1}${lb}${Body}${rb}${stuff2}]]
+Body_bottom [stuff] = [[${stuff}]]
+
+stuff [@cs] = [[${cs}]]
+stuffchar [c] = [[${c}]]
+
+brace [c] = [[${c}]]
+
+State [kstate Name lb @Transitions rb] = [[${kstate}${Name}${lb}${Transitions}${rb}]]
+Transition [kon Name Body] = [[${kon}${Name}${Body}]]
+
+MachineHeader [kmachine Name] = [[${kmachine}${Name}]]
+
+Name [letter @alnums] = [[${letter}${alnums}]]
+
+keyword [kw] = [[${kw}]]

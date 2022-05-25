@@ -1,0 +1,24 @@
+dr {
+Main = Box
+Box = "{" Command Box? "}"
+Command = 
+ | "every" "condition" "must" "be" "true" Box+   -- every
+ | "for" "every" "child" "of" "me" "⇒" NameDef   -- forEveryChild
+ | "for" "every" "port" "of" NameRef "⇒" NameDef -- forEveryPort
+ | "for" "every" "output" "port" "of" "me" "⇒" NameDef -- forEveryMePort
+ | "unless" Condition Else                       -- unless
+ | "OR" OrClause+                                -- OR
+ | Name "has" "0" "edges"                        -- zeroEdges
+ | Name "has" "1" "edge"                         -- oneEdge
+ | "design" "rule" "violation" fstring           -- drviolation
+
+Condition = Box
+Else = Box
+OrClause = Box
+
+NameDef = Name
+NameRef = Name
+Name = "«" letter alnum* "»"
+fstring = dq (~dq any)* dq
+dq = "\""
+}

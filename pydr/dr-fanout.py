@@ -1,0 +1,1 @@
+{everyconditionmustbetrue{foreverychildofme⇒«c»{foreveryportof«c»⇒«p»{unless{OR{«p»has0edges}{«p»has1edge}}{designruleviolation"r,e,s,t,r,i,c,t,i,o,n, ,e,r,r,o,r,:, ,f,a,n,o,u,t, ,o,n, ,«,p,»"}}}}{foreveryoutputportofme⇒«p»{unless{OR{«p»has0edges}{«p»has1edge}}{designruleviolation"r,e,s,t,r,i,c,t,i,o,n, ,e,r,r,o,r,:, ,f,a,n,o,u,t, ,o,n, ,«,p,»"}}}}

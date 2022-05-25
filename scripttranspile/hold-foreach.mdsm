@@ -1,0 +1,22 @@
+# foreach
+## 
+`var files;`
+
+## *idle*
+  ### **begin**
+    `files = fs.readdirSync ("${s}");`
+    ☞ generating
+## generating
+    ```
+      if (0 === files.length) {
+        ☞ idle
+      } else {
+        var newenv = env.cons ({f: file.unshift ()}, env);
+        ⇑ env `newenv`
+        ⇑ kick `true`
+      }
+    ```
+    ☞ blocked
+## *blocked*
+   ### **resume**
+    ☞ generating

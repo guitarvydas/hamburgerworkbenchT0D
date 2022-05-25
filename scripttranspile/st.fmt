@@ -1,0 +1,59 @@
+Main [lb Command rb] = [[${Command}]]
+ 
+Command_delete [kdelete kall kfiles kin s] = [[
+console.log ('rm -rf "${s}/*"')
+if (message.etag === "env") {
+  this.env = message.data;
+} else {
+require('child_process').execSync('rm -rf "${s}/*"')
+}
+]]
+
+Command_copy [kcopy NameRef kto s] = [[
+console.log ('cp "${NameRef}" "${s}"');
+if (message.etag === "env") {
+  this.env = message.data;
+} else {
+require('child_process').execSync('cp "${NameRef}" "${s}"')
+}
+]]
+
+Command_rename [krename from s] = [[
+console.log ('mv "${from}" "${s}"');
+if (message.etag === "env") {
+  this.env = message.data;
+} else {
+require('child_process').execSync('mv "${from}" "${s}"')
+}
+]]
+
+Command_foreach [kfor keach kfile kin s karrow NameDef] = [[
+console.log (\`foreach tag=/\${message.etag}/\`);
+
+// replace with foreach.mdsm
+
+// //console.log ('foreach '); console.log (message.etag);
+// var fs = require ('fs');
+// if (message.etag === "env") {
+//   this.env = message.data;
+// } else if (message.etag === "resume") {
+// } else if (message
+
+// if (this.state === sIdle) {
+// var files = fs.readdirSync ("${s}");
+// } else if (this.state
+// files.forEach (f => { 
+// 	         me.send ("out", f); 
+// 	      });
+// }
+]]
+
+string [dq1 @cs dq2] = [[${cs}]]
+
+dq [c] = [[${c}]]
+
+NameDef [Name] = [[${Name}]]
+NameRef [Name] = [[${Name}]]
+Name [lb letter @alnums rb] = [[${lb}${letter}${alnums}${rb}]]
+
+

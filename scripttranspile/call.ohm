@@ -1,0 +1,4 @@
+next {
+Next = "☞" Name
+Name = letter alnum*
+}

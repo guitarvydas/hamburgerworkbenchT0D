@@ -1,0 +1,105 @@
+[
+[{
+"children":[]
+"connections":[]
+"id":"cell_15" 
+"inputs":["env" "baton" ]
+"name":"noname_1" 
+"outputs":["env" "baton" ]
+"synccode":"&lt;span style=&quot;text-align: center&quot;&gt;❮&lt;/span&gt;&lt;span style=&quot;font-size: 11px&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(51 , 51 , 51)&quot;&gt;delete all files in &quot;/tmp/iwantahamburger&quot;&amp;nbsp;&lt;/span&gt;❯" }]
+[{
+"children":[]
+"connections":[]
+"id":"cell_23" 
+"inputs":["env" "baton" ]
+"name":"noname_2" 
+"outputs":["env" "baton" ]
+"synccode":"&lt;span style=&quot;text-align: center&quot;&gt;❮&lt;/span&gt;&lt;span style=&quot;font-size: 11px&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;color: rgb(51 , 51 , 51)&quot;&gt;copy «f» to &quot;/tmp/iwantahamburger&quot;&amp;nbsp;&lt;/span&gt;❯" }]
+[{
+"children":[]
+"connections":[]
+"id":"cell_31" 
+"inputs":["env" "baton" ]
+"name":"noname_3" 
+"outputs":["env" "baton" ]
+"synccode":"&lt;div&gt;❮ rename &quot;/tmp/iwantahamburger/hw_book.md&quot; &quot;/tmp/iwantahamburger/book.md&quot; ❯&lt;/div&gt;" }]
+[{
+"children":["noname_1" "noname_2" "noname_3" "noname_0" ]
+"connections":[{
+"receivers":[{
+"receiver":{
+"component":"noname_1" 
+"port":"baton" }}]
+"senders":[{
+"sender":{
+"component":"noname_0" 
+"port":"baton" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_2" 
+"port":"env" }}]
+"senders":[{
+"sender":{
+"component":"noname_1" 
+"port":"env" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_2" 
+"port":"baton" }}]
+"senders":[{
+"sender":{
+"component":"noname_1" 
+"port":"baton" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_3" 
+"port":"env" }}]
+"senders":[{
+"sender":{
+"component":"noname_2" 
+"port":"env" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_3" 
+"port":"baton" }}]
+"senders":[{
+"sender":{
+"component":"noname_2" 
+"port":"baton" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_0" 
+"port":"env" }}]
+"senders":[{
+"sender":{
+"component":"_me"
+"port":"env" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_0" 
+"port":"baton" }}]
+"senders":[{
+"sender":{
+"component":"_me"
+"port":"baton" }}]},{
+"receivers":[{
+"receiver":{
+"component":"noname_1" 
+"port":"env" }}]
+"senders":[{
+"sender":{
+"component":"noname_0" 
+"port":"env" }}]}]
+"id":"cell_6" 
+"inputs":["env" "baton" ]
+"name":"script" 
+"outputs":["out" ]
+"synccode":"" }]
+[{
+"children":[]
+"connections":[]
+"id":"cell_7" 
+"inputs":["baton" "env" ]
+"name":"noname_0" 
+"outputs":["env" "baton" ]
+"synccode":"&lt;span style=&quot;text-align: center&quot;&gt;❮&lt;/span&gt;&amp;nbsp; for each file in '&lt;span style=&quot;font-size: 11px&quot;&gt;/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: 11px&quot;&gt;⇉ «f»&amp;nbsp;&lt;/span&gt;❯" }]]

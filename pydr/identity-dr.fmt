@@ -1,0 +1,22 @@
+Main [Box] = [[${Box}]]
+Box [lb Command @OptionalBox rb] = [[${lb}${Command}${OptionalBox}${rb}]]
+
+Command_every [kevery kcondition kmust kbe ktrue @Box] = [[${kevery}${kcondition}${kmust}${kbe}${ktrue}${Box}]]
+Command_forEveryChild [kfor kevery kchild kof kme karrow NameDef] = [[${kfor}${kevery}${kchild}${kof}${kme}${karrow}${NameDef}]]
+Command_forEveryPort [kfor kevery kport kof NameRef karrow NameDef] = [[${kfor}${kevery}${kport}${kof}${NameRef}${karrow}${NameDef}]]
+Command_forEveryMePort [kfor kevery koutput kport kof kme karrow NameDef] = [[${kfor}${kevery}${koutput}${kport}${kof}${kme}${karrow}${NameDef}]]
+Command_unless [kunless Condition Else] = [[${kunless}${Condition}${Else}]]
+Command_OR [kOR @OrClause] = [[${kOR}${OrClause}]]
+Command_zeroEdges [Name khas k0 kedges] = [[${Name}${khas}${k0}${kedges}]]
+Command_oneEdge [Name khas k1 kedge] = [[${Name}${khas}${k1}${kedge}]]
+Command_drviolation [kdesign krule kviolation fstring] = [[${kdesign}${krule}${kviolation}${fstring}]]
+
+Condition [Box] = [[${Box}]]
+Else [Box] = [[${Box}]]
+OrClause [Box] = [[${Box}]]
+
+NameDef [Name] = [[${Name}]]
+NameRef [Name] = [[${Name}]]
+Name [lb letter @alnums rb] = [[${lb}${letter}${alnums}${rb}]]
+fstring [dq1 @cs dq2] = [[${dq1}${cs}${dq2}]]
+dq [c] = [[${c}]]

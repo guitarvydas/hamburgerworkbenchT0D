@@ -1,0 +1,10 @@
+send {
+Send = "⇑" Name verbatim
+Name = letter alnum*
+
+verbatim =
+  | "⟪" verbatim "⟫"  -- rec
+  | (~vbracket any)+  -- bottom
+  
+vbracket = "⟪" | "⟫"
+}

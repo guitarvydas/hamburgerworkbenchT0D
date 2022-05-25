@@ -1,0 +1,25 @@
+# foreach
+## 
+`var files;`
+
+## *idle*
+  ### **begin**
+    `files = fs.readdirSync ("${s}");`
+    `this.next ('generating');`
+## generating
+    ⟪
+      if (0 === files.length) {
+        `this.next ('idle');`
+      } else {
+        var newenv = env.cons ({f: file.unshift ()}, env);
+        `this.send (env, newenv);`
+        `this.send (kick, true);`
+      }
+    ⟫
+    `this.next ('blocked');`
+## *blocked*
+   ### **resume**
+    `this.next ('generating');`
+
+
+

@@ -1,0 +1,26 @@
+❮ closure foreach
+    ❮ list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS' ⇉ «files» ❯
+    ❮ start state idle ❯
+    ❮ handler
+	❮ state case idle
+  	    ❮ on begin
+	      ☞ generating
+ 	    ❯
+        ❯
+	❮ state case generating
+	    ❲
+	      • «files».empty ❮⇢ idle❯
+	      • ❮
+		  ⇑ subenv ❮ augment env with «files».pop ❯
+		  ⇑ kick ❮ trigger ❯
+		  ⇢ blocked
+  	        ❯
+	    ❳
+ 	❯
+	❮ state case blocked
+  	    ❮ on resume
+		☞ generating
+ 	    ❯
+ 	❯
+    ❯
+❯

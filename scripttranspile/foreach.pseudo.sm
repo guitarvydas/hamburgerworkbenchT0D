@@ -1,0 +1,34 @@
+@closure foreach
+@start ???
+@handler foreach 
+❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS' ⇉ «files»❯
+
+@state idle {
+
+@on begin {
+
+%go generating
+}
+@endon
+
+}
+@endstate
+@state generating {
+ ❮? «files».empty _next_ idle❯
+%send subenv ❮augment env with «files».pop❯
+%send kick ❮trigger❯
+%next blocked
+}
+@endstate
+@state blocked {
+
+@on resume {
+
+%go generating
+}
+@endon
+
+}
+@endstate
+@endhandler
+@endclosure

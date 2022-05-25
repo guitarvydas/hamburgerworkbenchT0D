@@ -1,0 +1,16 @@
+# machine foreach
+## 
+`list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS' ⇉ «files»`
+
+## **idle**
+  ### *begin*
+    _go_ generating
+## **generating**
+    `? «files».empty _next_ idle`
+    _send_ subenv `augment env with «files».pop`
+    _send_ kick `trigger`
+    _next_ blocked
+## **blocked**
+   ### *resume*
+    _go_ generating
+

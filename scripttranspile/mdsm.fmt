@@ -1,0 +1,23 @@
+Machine [Header Decls @Body] = [[%machine\n${Header}\n${Decls}${Body}\n%endmachine\n]]
+Header [k kmachine Name] = [[${Name}]]
+
+
+Decls [k1 k2 @Code] = [[\n%decls\n${Code}\n%enddecls\n]]
+
+State [k1 k2 StateName @Code @Transitions] = [[\n%state ${StateName} \n${Code}${Transitions}\n%endstate\n]]
+
+Transition [k1 k2 k3 TransitionName @Body] = [[\n%on ${TransitionName} \n${Body}\n%endon\n]]
+
+Code_send [op port v] = [[%send ${port} ${v}]]
+Code_proceedto [op Name] = [[%go ${Name}]]
+Code_nextstate [op Name] = [[%next ${Name}]]
+Code_raw [v] = [[${v}]]
+
+Port [Name] = [[${Name}]]
+
+verbatim_rec [t1 @v t2] = [[${t1}${v}${t2}\n]]
+verbatim_bottom [@cs] = [[${cs}]]
+  
+Name [letter @alnum] = [[${letter}${alnum}]]
+TransitionName [k1 Name k2] = [[${Name}]]
+StateName [k1 k2 Name k3 k4] = [[${Name} ]]

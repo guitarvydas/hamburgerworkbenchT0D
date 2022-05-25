@@ -1,0 +1,21 @@
+st {
+Main = "❮" Command "❯"
+ 
+Command =
+  | "delete" "all" "files" "in" string          -- delete
+  | "copy" NameRef "to" string                  -- copy
+  | "rename" string string                      -- rename
+  | "for" "each" "file" "in" string "⇉" NameDef -- foreach
+
+string = 
+  | dq (~dq any)* dq
+  | sq (~sq any)* sq
+dq = "\""
+sq = "'"
+
+NameDef = Name
+NameRef = Name
+Name = "«" letter alnum* "»"
+
+}
+

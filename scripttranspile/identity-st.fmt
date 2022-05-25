@@ -1,0 +1,17 @@
+Main [lb Command rb] = [[${Command}]]
+ 
+Command_delete [kdelete kall kfiles kin s] = [[${kdelete}${kall}${kfiles}${kin}${s}]]
+Command_copy [kcopy NameRef kto s] = [[${kcopy}${NameRef}${kto}${s}]]
+Command_rename [krename from s] = [[${krename}${from}${s}]]
+Command_foreach [kfor keach kfile kin s karrow NameDef] = [[${kfor}${keach}${kfile}${kin}${s}${karrow}${NameDef}]]
+
+
+string [dq1 @cs dq2] = [[${cs}]]
+
+dq [c] = [[${c}]]
+
+NameDef [Name] = [[${Name}]]
+NameRef [Name] = [[${Name}]]
+Name [lb letter @alnums rb] = [[${lb}${letter}${alnums}${rb}]]
+
+

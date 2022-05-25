@@ -1,0 +1,25 @@
+Main [kmachine Name Declarations Body kend] = [[@closure ${Name}\n@start ???\n@handler ${Name} ${Declarations}${Body}\n@endhandler\n@endclosure]]
+
+Declarations [kdecls @Verbatim kend] = [[\n${Verbatim}]]
+
+Body [@State] = [[\n${State}]]
+
+State [kstate Name @Code @Transition kend] = [[\n@state ${Name} \{\n${Code}${Transition}\n\}\n@endstate]]
+Transition [kon Name @Code kend] = [[\n@on ${Name} \{\n${Code}\n\}\n@endon\n]]
+
+Code_send [op Port verbatim] = [[\n${op} ${Port} ${verbatim}]]
+Code_go [op Name] = [[\n${op} ${Name}]]
+Code_next [op Name] = [[\n${op} ${Name}]]
+Code_raw [v] = [[ ${v}]]
+  
+Port [Name] = [[${Name}]]
+
+verbatim_rec [lb v rb] = [[${lb}${v}${rb}]]
+verbatim_bottom [@stuff] = [[${stuff}]]
+
+stuff [c] = [[${c}]]
+  
+vsep [c] = [[${c}]]
+Name [letter @alnum] = [[${letter}${alnum}]]
+
+
