@@ -1,16 +1,12 @@
-prep=./prep/prep
+## xxx.* is a placeholder during dev
+## I expect to replace xxx.* with appropriate bits of diagrams/code over time
+
+prep=~/.local/tools/prep
 cwd=`pwd`
 support=--support=${cwd}/support.js
 
-all: clean main.js testbench.json testbench.js script.js
-	@echo Now, load 'hamburgerworkbench0d/hamburger0d.html' into a browser
-
-testbench.json:
-	./d2json testbench.drawio >testbench.json
-
-testbench.js: testbench.json
-	(cd json2js ; make dev)
-	cp json2js/testbench.js .
+all: clean script.app.js
+	@echo script.js created
 
 dev:
 	rm script.json
@@ -27,16 +23,16 @@ script.js: script.json json2js/script.fmt
 	cat cos.js out.js spost.js >script.js
 
 main: main.js
-	node main.js d2f.drawio
+	node main.js xxx.drawio
 
 jslibs:
 	npm install atob pako yargs ohm-js
 
-main.js: pre.js cos.js d2f.js funcs.js post.js parser.js
-	cat pre.js cos.js d2f.js funcs.js parser.js post.js >main.js
-	cat pre.js cos.js d2f.js funcs.js parser.js post.js >d2jsonmain.js
+script.app.js: pre.js cos.js xxx.js post.js parser.js
+	cat pre.js cos.js xxx.js parser.js post.js >main.js
+	cat pre.js cos.js xxx.js parser.js post.js >script.app.js
 
 clean:
 	rm -f main.js
-	rm -f testbench.json 
-	rm -f testbench.js
+	rm -f script.json 
+	rm -f script.js

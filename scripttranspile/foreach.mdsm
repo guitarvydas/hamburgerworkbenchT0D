@@ -6,8 +6,8 @@
   ### *begin*
     _go_ generating
 ## **generating**
-    `? «files».empty _next_ idle`
-    _send_ subenv `augment env with «files».pop`
+    `? «files»@empty _next_ idle`
+    _send_ subenv `augment env with «files»@pop`
     _send_ kick `trigger`
     _next_ blocked
 ## **blocked**

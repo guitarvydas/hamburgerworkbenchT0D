@@ -1,0 +1,35 @@
+%function («me» «message»)
+  %initialize «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
+  %variable «state» 'idle'
+  %switch «state»
+    %case 'idle'
+      %switch «message»/etag
+	%case 'begin'
+          %overwrite «state» 'generating'
+	%endswitch 'begin'
+      %endcase «message»/etag
+    %endcase 'idle'
+
+    %case 'generating'
+      %switch «message»/etag
+	%case *
+	  %verbatim ❮? «files»@empty %eval %overwrite «state» 'blocked' %endeval %yield❯
+	  %scope «subenv» «subenv» %cons («files»/pop «env»)
+	    %enqueue «me»/outputqueue «subenv»
+	  %endscope «subenv»
+	  %enqueue «me»/kick ❮trigger❯
+	  %overwrite «state» 'blocked'
+	%endcase *
+      %endswitch «message»/etag
+    %endcase 'generating'
+
+    %case 'block'
+      %case «message»/etag
+	%case 'resume'
+          %overwrite «state» 'generating'
+        %endcase 'resume'
+      %endswitch «message»/etag
+    %endcase 'block'
+  %endswitch «state»
+%endfunction
+
