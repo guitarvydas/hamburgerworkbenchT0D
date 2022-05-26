@@ -8,23 +8,32 @@ Operator =
   | "%persistent" VariableNameDef Operand -- persistent
   | "%function" FunctionNameDef Formals Operator+ -- function
   | "%endfunction"  FunctionNameRef            -- endfunction
-  | "%switch" VariableNameRef Case+ -- switch
-  | "%endswitch" VariableNameRef -- endswitch
-  | Case -- case
-  | "%endcase" Operand -- endcase
-  | "%invoke" EA -- invoke
+  | "%switch" Operand Case+ -- switch
+  | "%endswitch" Operand -- endswitch
+  //| Case -- case
+  //| "%endcase" Operand -- endcase
+  | "%invoke" EA Args -- invoke
   | "%overwrite" VariableNameRef Operand -- overwrite
   | "%mapfunctions" ListNameRef -- mapfunctions
   | "%verbatim" verbatim -- verbatim
   | "%scope" VariableNameDef VariableNameDef Operand Operator+ -- scope
   | "%endscope" VariableNameRef -- endscope
-  | "%cons" "(" Operand Operand ")" -- cons
-  | "%enqueue" Operand VariableNameRef -- enqueue
+  | "%eval" Operand -- eval
+  | "%cond" CondIf* CondElse? "%endcond" -- cond
+  | "%yield" -- yield
 
-Formals = "(" VariableNameDef* ")"
-Args = "(" Operand* ")"
+Formals =
+  | "(" "{" VariableNameDef+ "}" ")" -- collection
+  | "(" VariableNameDef ")" -- single
+  | "(" ")" -- noformals
 
-Case = "%case" Operand Operator+
+Args =
+  | "(" Operand ")" -- onearg
+  | "(" ")" -- noargs
+
+Case = "%case" Operand Operator+ "%endcase" Operand
+CondIf = "%condif" Operand Operator+ "%endcondif" Operand
+CondElse = "%condelse" Operator+ "%endcondelse"
 
 Operand =
   | Variable "/" Name         -- attribute
@@ -36,8 +45,9 @@ Operand =
   | EA                        -- effectiveaddress
   | "[" Operand+ "]"          -- list
   | "[" "]"                   -- emptylist
-  | "#yes"                    -- yes  
-  | "#no"                     -- no
+  | "*yes*"                    -- yes  
+  | "*no*"                     -- no
+  | "{" Operand+ "}"          -- synchronouscollection
   | string                    -- string
   | verbatim                  -- verbatim
 
@@ -50,10 +60,10 @@ VariableNameDef = Variable
 VariableNameRef = Variable
 ListNameRef = Variable
 
-keyword = "#yes" | "#no"
-keywordlefthandle = "#"
+operandkeyword = "*yes*" | "*no*"
+operandkeywordlefthandle = "*"
 operatorlefthandle = "%"
-lefthandle = operatorlefthandle | keywordlefthandle
+lefthandle = operatorlefthandle | operandkeywordlefthandle
 Name = firstletter followletter*
 firstletter = letter | "_" | "." | "λ"
 followletter = alnum | firstletter
@@ -67,7 +77,7 @@ verbatim =
   
 stuff = ~vsep any
 vsep = bracket | lefthandle
-bracket = "❮" | "❯" | "«" | "»" | "(" | ")"
+bracket = "❮" | "❯" | "«" | "»" | "(" | ")" | "{" | "}"
 
 string = 
   | sq (~sq any)* sq

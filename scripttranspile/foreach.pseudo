@@ -5,63 +5,67 @@
   %persistent «outputqueue» []
 
 
-%function «fforeach_0_handler» («args.self» «args.message»)
+%function «fforeach_0_handler» ({«args.self» «args.message»})
   %switch «state»
     %case 'idle'
-      %invoke &«fidlehandle» («args.self» «args.message»)
+      %invoke &«fidlehandler» ({«args.self» «args.message»})
     %endcase 'idle'
     %case 'generating'
-      %invoke &«fgeneratinghandle» («args.self» «args.message»)
+      %invoke &«fgeneratinghandler» ({«args.self» «args.message»})
     %endcase 'generating'
     %case 'blocked'
-      %invoke &«fblockedhandle» («args.self» «args.message»)
+      %invoke &«fblockedhandler» ({«args.self» «args.message»})
     %endcase 'blocked'
 
   %function «fidleenter» ()
-    %invoke &«exitstack»!push (&«fidleexit»)
+    %eval «exitstack»!push (&«fidleexit»)
     %overwrite «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
   %endfunction «fidleenter»
   %function «fidleexit» () %endfunction «fidleexit»
-  %function «fidlehandle» («args.self» «args.message»)
+  %function «fidlehandler» ({«args.self» «args.message»})
     %switch «args.message»/etag
       %case 'begin'
-	%mapfunctions «exitstack»
-	%overwrite «state» 'generating'
-	%invoke &«fgeneratingenter» ()
-      %endswitch 'begin'
+        %mapfunctions «exitstack»
+        %overwrite «state» 'generating'
+        %invoke &«fgeneratingenter» ()
+      %endcase 'begin'
     %endswitch «args.message»/etag
-  %endfunction «fidlehandle»
+  %endfunction «fidlehandler»
 
   %function «fgeneratingenter» ()
-      %invoke &«exitstack»!push (&«fgeneratingexit»)
-      %switch «message»/etag
-	%case *
-	  %verbatim ❮? «files»?empty %mapfunctions «exitstack» %eval %overwrite «state» 'idle' %endeval %yield❯
-	  %scope «subenv» «subenv» %cons («files»/pop «env»)
-	    %enqueue «me»/outputqueue «subenv»
-	  %endscope «subenv»
-	  %enqueue «outputqueue»/kick ❮trigger❯
-	  %mapfunctions «exitstack»
-	  %overwrite «state» 'blocked'
-	%endcase *
-      %endswitch «message»/etag
+    %eval «exitstack»!push (&«fgeneratingexit»)
+    %cond
+      %condif «files»?empty
+          %mapfunctions «exitstack»
+          %overwrite «state» 'idle'
+          %yield
+      %endcondif «files»?empty
+      %condelse
+            %scope «subenv» «subenv»  «env»!cons («files»/pop)
+              %eval «me»/outputqueue!enqueue («subenv»)
+            %endscope «subenv»
+            %eval «outputqueue»!enqueue ({'kick' ❮trigger❯})
+            %mapfunctions «exitstack»
+            %overwrite «state» 'blocked'
+     %endcondelse
+   %endcond
   %endfunction «fgeneratingenter»
+
   %function «fgeneratingexit» () %endfunction «fgeneratingexit»
-  %function «fgeneratinghandle» («args.self» «args.message») «fgeneratinghandle»
+  %function «fgeneratinghandler» ({«args.self» «args.message»}) %endfunction «fgeneratinghandler»
 
   %function «fblockedenter»
-      %invoke &«exitstack»!push (&«fblockedexit»)
+      %eval «exitstack»!push (&«fblockedexit»)
   %endfunction «fblockedenter»
   %function «fblockedexit»
   %endfunction «fblockedexit»
-  %function «fblockedhandler»
-      %swith «message»/etag
-	%case 'resume'
-	  %mapfunctions «exitstack»
+  %function «fblockedhandler» ({«args.self» «args.message»})
+      %switch «message»/etag
+        %case 'resume'
+          %mapfunctions «exitstack»
           %overwrite «state» 'generating'
         %endcase 'resume'
       %endswitch «message»/etag
-  %endswitch «state»
   %endfunction «fblockedhandler»
   
 %endconstructor
