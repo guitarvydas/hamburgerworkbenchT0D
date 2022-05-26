@@ -4,6 +4,7 @@
   %persistent «handler» &«fforeach_0_handler»
   %persistent «outputqueue» []
 
+  %invokefunction &«fidleenter» ()
 
 %function «fforeach_0_handler» ({«args.self» «args.message»})
   %switch «state»
@@ -16,6 +17,7 @@
     %case 'blocked'
       %invokefunction &«fblockedhandler» ({«args.self» «args.message»})
     %endcase 'blocked'
+  %endswitch «state»
 
   %function «fidleenter» ()
     %invokeproc «exitstack»!push (&«fidleexit»)
@@ -24,6 +26,9 @@
   %function «fidleexit» () %endfunction «fidleexit»
   %function «fidlehandler» ({«args.self» «args.message»})
     %switch «args.message»/etag
+      %case 'env'
+        %overwrite «state» «args.message»/data
+      %endcase 'env'
       %case 'begin'
         %mapfunctions «exitstack»
         %overwrite «state» 'generating'
@@ -54,7 +59,13 @@
   %endfunction «fgeneratingenter»
 
   %function «fgeneratingexit» () %endfunction «fgeneratingexit»
-  %function «fgeneratinghandler» ({«args.self» «args.message»}) %endfunction «fgeneratinghandler»
+  %function «fgeneratinghandler» ({«args.self» «args.message»})
+    %switch «message»/etag
+      %case 'env'
+        %overwrite «state» «args.message»/data
+      %endcase 'env'
+    %endswitch «message»/etag
+  %endfunction «fgeneratinghandler»
 
   %function «fblockedenter» ()
       %invokeproc «exitstack»!push (&«fblockedexit»)
@@ -63,6 +74,9 @@
   %endfunction «fblockedexit»
   %function «fblockedhandler» ({«args.self» «args.message»})
       %switch «message»/etag
+	%case 'env'
+	  %overwrite «state» «args.message»/data
+	%endcase 'env'
         %case 'resume'
           %mapfunctions «exitstack»
           %overwrite «state» 'generating'
