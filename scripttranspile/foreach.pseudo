@@ -18,7 +18,7 @@
     %endcase 'blocked'
 
   %function «fidleenter» ()
-    %eval «exitstack»!push (&«fidleexit»)
+    %invokeproc «exitstack»!push (&«fidleexit»)
     %overwrite «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
   %endfunction «fidleenter»
   %function «fidleexit» () %endfunction «fidleexit»
@@ -33,7 +33,7 @@
   %endfunction «fidlehandler»
 
   %function «fgeneratingenter» ()
-    %eval «exitstack»!push (&«fgeneratingexit»)
+    %invokeproc «exitstack»!push (&«fgeneratingexit»)
     %cond
       %condif «files»?empty
           %mapfunctions «exitstack»
@@ -42,9 +42,9 @@
       %endcondif «files»?empty
       %condelse
             %scope «subenv» «subenv»  «env»!cons («files»/pop)
-              %eval «me»/outputqueue!enqueue («subenv»)
+              %invokeproc «outputqueue»!enqueue («subenv»)
             %endscope «subenv»
-            %eval «outputqueue»!enqueue ({'kick' ❮trigger❯})
+            %invokeproc «outputqueue»!enqueue ({'kick' ❮trigger❯})
             %mapfunctions «exitstack»
             %overwrite «state» 'blocked'
      %endcondelse
@@ -54,10 +54,10 @@
   %function «fgeneratingexit» () %endfunction «fgeneratingexit»
   %function «fgeneratinghandler» ({«args.self» «args.message»}) %endfunction «fgeneratinghandler»
 
-  %function «fblockedenter»
-      %eval «exitstack»!push (&«fblockedexit»)
+  %function «fblockedenter» ()
+      %invokeproc «exitstack»!push (&«fblockedexit»)
   %endfunction «fblockedenter»
-  %function «fblockedexit»
+  %function «fblockedexit» ()
   %endfunction «fblockedexit»
   %function «fblockedhandler» ({«args.self» «args.message»})
       %switch «message»/etag
@@ -68,5 +68,4 @@
       %endswitch «message»/etag
   %endfunction «fblockedhandler»
   
-%endconstructor
-
+%endconstructor foreach_0

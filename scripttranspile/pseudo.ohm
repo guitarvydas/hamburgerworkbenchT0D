@@ -18,7 +18,7 @@ Operator =
   | "%verbatim" verbatim -- verbatim
   | "%scope" VariableNameDef VariableNameDef Operand Operator+ -- scope
   | "%endscope" VariableNameRef -- endscope
-  | "%eval" Operand -- eval
+  | "%invokeproc" Operand -- eval
   | "%cond" CondIf* CondElse? "%endcond" -- cond
   | "%yield" -- yield
 
@@ -36,11 +36,11 @@ CondIf = "%condif" Operand Operator+ "%endcondif" Operand
 CondElse = "%condelse" Operator+ "%endcondelse"
 
 Operand =
-  | Variable "/" Name         -- attribute
-  | Variable "@" Name         -- impurefunction
-  | Variable "!" Name "(" Operand ")" -- proc1arg
-  | Variable "!" Name "(" ")" -- proc0arg
-  | Variable "?" Name         -- predicate
+  | Operand "/" Name         -- attribute
+  | Operand "@" Name         -- impurefunction
+  | Operand "!" Name "(" Operand ")" -- proc1arg
+  | Operand "!" Name "(" ")" -- proc0arg
+  | Operand "?" Name         -- predicate
   | VariableNameRef           -- varref
   | EA                        -- effectiveaddress
   | "[" Operand+ "]"          -- list
@@ -64,7 +64,7 @@ operandkeyword = "*yes*" | "*no*"
 operandkeywordlefthandle = "*"
 operatorlefthandle = "%"
 lefthandle = operatorlefthandle | operandkeywordlefthandle
-Name = firstletter followletter*
+Name (Name) = firstletter followletter*
 firstletter = letter | "_" | "." | "λ"
 followletter = alnum | firstletter
 
