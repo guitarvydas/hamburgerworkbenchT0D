@@ -1,35 +1,68 @@
-%function («me» «message»)
-  %initialize «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
-  %variable «state» 'idle'
+%constructor foreach_0
+  %persistent «state» 'idle'
+  %persistent «exitstack» []
+  %persistent «handler» &«fforeach_0_handler»
+  %persistent «outputqueue» []
+
+
+%function fforeach_0_handler («args.self» «args.message»)
   %switch «state»
     %case 'idle'
-      %switch «message»/etag
-	%case 'begin'
-          %overwrite «state» 'generating'
-	%endswitch 'begin'
-      %endcase «message»/etag
+      %invoke &«fidlehandle» («args.self» «args.message»)
     %endcase 'idle'
-
     %case 'generating'
+      %invoke &«fgeneratinghandle» («args.self» «args.message»)
+    %endcase 'generating'
+    %case 'blocked'
+      %invoke &«fblockedhandle» («args.self» «args.message»)
+    %endcase 'blocked'
+
+  %function «fidleenter» ()
+    %invoke &«exitstack»!push (&«fidleexit»)
+    %overwrite «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
+  %endfunction «fidleenter»
+  %function «fidleexit» () %endfunction «fidleexit»
+  %function «fidlehandle» («args.self» «args.message»)
+    %switch «args.message»/etag
+      %case 'begin'
+	%mapfunctions «exitstack»
+	%overwrite «state» 'generating'
+	%invoke &«fgeneratingenter» ()
+      %endswitch 'begin'
+    %endswitch «args.message»/etag
+  %endfunction «fidlehandle»
+
+  %function «fgeneratingenter» ()
+      %invoke &«exitstack»!push (&«fgeneratingexit»)
       %switch «message»/etag
 	%case *
-	  %verbatim ❮? «files»@empty %eval %overwrite «state» 'blocked' %endeval %yield❯
+	  %verbatim ❮? «files»?empty %mapfunctions «exitstack» %eval %overwrite «state» 'idle' %endeval %yield❯
 	  %scope «subenv» «subenv» %cons («files»/pop «env»)
 	    %enqueue «me»/outputqueue «subenv»
 	  %endscope «subenv»
-	  %enqueue «me»/kick ❮trigger❯
+	  %enqueue «outputqueue»/kick ❮trigger❯
+	  %mapfunctions «exitstack»
 	  %overwrite «state» 'blocked'
 	%endcase *
       %endswitch «message»/etag
-    %endcase 'generating'
+  %endfunction «fgeneratingenter»
+  %function «fgeneratingexit» () %endfunction «fgeneratingexit»
+  %function «fgeneratinghandle» («args.self» «args.message») «fgeneratinghandle»
 
-    %case 'block'
-      %case «message»/etag
+  %function «fblockedenter»
+      %invoke &«exitstack»!push (&«fblockedexit»)
+  %endfunction «fblockedenter»
+  %function «fblockedexit»
+  %endfunction «fblockedexit»
+  %function «fblockedhandler»
+      %swith «message»/etag
 	%case 'resume'
+	  %mapfunctions «exitstack»
           %overwrite «state» 'generating'
         %endcase 'resume'
       %endswitch «message»/etag
-    %endcase 'block'
   %endswitch «state»
-%endfunction
+  %endfunction «fblockedhandler»
+  
+%endconstructor
 

@@ -1,0 +1,70 @@
+pseudo {
+
+Operator =
+  | "%constructor" NameDef -- constructor
+  | "%endconstructor    -- endconstructor
+  | "%persistent" VariableNameDef Operand -- persistent
+  | "%function" NameDef Formals -- function
+  | "%endfunction"              -- endfunction
+  | "%switch" VariableNameRef -- switch
+  | "%endswitch" -- endswitch
+  | "%case" Operand -- case
+  | "%endcase" -- endcase
+  | "%invoke" EA Args
+  | "%overwrite" VariableNameRef Operand -- overwrite
+  | "%mapfunctions" ListNameRef -- mapfunctions
+  | "%verbatim" verbatim
+  | "%scope" VariableNameDef VariableNameDef Operand -- scope
+  | "%endscope" -- endscope
+  | "%cons" "(" Operand Operand ")"
+  | "%enqueue" Operand VariableNameRef
+
+Formals = "(" VariableNameDef* ")"
+Args = "(" Operand* ")"
+
+Operand =
+  | Variable "/" Name         -- attribute
+  | Variable "@" Name         -- impurefunction
+  | Variable "!" Name Operand -- proc
+  | Variable "?" Name         -- predicate
+  | VariableNameRef           -- varref
+  | EA                        -- effectiveaddress
+  | "[" Operand+ "]"          -- list
+  | "[" "]"                   -- emptylist
+  | "#yes"                    -- yes  
+  | "#no"                     -- no
+  | string                    -- string
+  | verbatim                  -- verbatim
+
+EA = "&" Operand
+
+Variable = 
+  | "«" Name "»" 
+
+VariableNameDef = Variable
+VariableNameRef = Variable
+ListNameRef = Variable
+
+keyword = "#yes" | "#no"
+keywordlefthandle = "#"
+operatorlefthandle = "%"
+lefthandle = operatorlefthandle | keywordlefthandle
+Name = firstletter followletter*
+firstletter = letter | "_" | "." | "λ"
+followletter = alnum | firstletter
+
+verbatim =
+  | "❮" verbatim "❯" -- rec
+  | stuff+           -- bottom
+  
+stuff = ~vsep any
+vsep = bracket | lefthandle
+bracket = "❮" | "❯" | "«" | "»" | "(" | ")"
+
+string = 
+  | sq (~sq any)* sq
+  | dq (~dq any)* dq
+
+sq = "'"
+dq = "\""
+}

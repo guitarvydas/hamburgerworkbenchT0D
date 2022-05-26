@@ -24,7 +24,9 @@ verbatim =
 stuff = ~vsep any | "_"
   
 vsep = "❮" | "❯" | "#" | "_"
-Name = letter alnum*
+Name = firstletter followletter*
+firstletter = letter | "_" | "." | "λ"
+followletter = alnum | firstletter
 StateName = "*" "*" Name "*" "*"
 TransitionName = "*" Name "*"
 }
