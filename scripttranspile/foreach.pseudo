@@ -5,7 +5,7 @@
   %persistent «outputqueue» []
 
 
-%function fforeach_0_handler («args.self» «args.message»)
+%function «fforeach_0_handler» («args.self» «args.message»)
   %switch «state»
     %case 'idle'
       %invoke &«fidlehandle» («args.self» «args.message»)

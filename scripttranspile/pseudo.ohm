@@ -1,31 +1,36 @@
 pseudo {
 
+Main = Operator+
+
 Operator =
   | "%constructor" NameDef -- constructor
-  | "%endconstructor    -- endconstructor
+  | "%endconstructor" NameRef   -- endconstructor
   | "%persistent" VariableNameDef Operand -- persistent
-  | "%function" NameDef Formals -- function
-  | "%endfunction"              -- endfunction
-  | "%switch" VariableNameRef -- switch
-  | "%endswitch" -- endswitch
-  | "%case" Operand -- case
-  | "%endcase" -- endcase
-  | "%invoke" EA Args
+  | "%function" FunctionNameDef Formals Operator+ -- function
+  | "%endfunction"  FunctionNameRef            -- endfunction
+  | "%switch" VariableNameRef Case+ -- switch
+  | "%endswitch" VariableNameRef -- endswitch
+  | Case -- case
+  | "%endcase" Operand -- endcase
+  | "%invoke" EA -- invoke
   | "%overwrite" VariableNameRef Operand -- overwrite
   | "%mapfunctions" ListNameRef -- mapfunctions
-  | "%verbatim" verbatim
-  | "%scope" VariableNameDef VariableNameDef Operand -- scope
-  | "%endscope" -- endscope
-  | "%cons" "(" Operand Operand ")"
-  | "%enqueue" Operand VariableNameRef
+  | "%verbatim" verbatim -- verbatim
+  | "%scope" VariableNameDef VariableNameDef Operand Operator+ -- scope
+  | "%endscope" VariableNameRef -- endscope
+  | "%cons" "(" Operand Operand ")" -- cons
+  | "%enqueue" Operand VariableNameRef -- enqueue
 
 Formals = "(" VariableNameDef* ")"
 Args = "(" Operand* ")"
 
+Case = "%case" Operand Operator+
+
 Operand =
   | Variable "/" Name         -- attribute
   | Variable "@" Name         -- impurefunction
-  | Variable "!" Name Operand -- proc
+  | Variable "!" Name "(" Operand ")" -- proc1arg
+  | Variable "!" Name "(" ")" -- proc0arg
   | Variable "?" Name         -- predicate
   | VariableNameRef           -- varref
   | EA                        -- effectiveaddress
@@ -53,6 +58,9 @@ Name = firstletter followletter*
 firstletter = letter | "_" | "." | "λ"
 followletter = alnum | firstletter
 
+NameDef = Name
+NameRef = Name
+
 verbatim =
   | "❮" verbatim "❯" -- rec
   | stuff+           -- bottom
@@ -67,4 +75,15 @@ string =
 
 sq = "'"
 dq = "\""
+
+// I'm undecided about whether function names should look like variable
+// names or unadorned names...
+// (I tried using λ as a prefix, but it looked too busy (I'm probably
+// still stuck in the mindset of evaluating appearances based on
+// human readability))
+FunctionNameDef = Variable
+FunctionNameRef = Variable
+
 }
+
+
