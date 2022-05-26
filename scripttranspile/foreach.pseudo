@@ -8,13 +8,13 @@
 %function «fforeach_0_handler» ({«args.self» «args.message»})
   %switch «state»
     %case 'idle'
-      %invoke &«fidlehandler» ({«args.self» «args.message»})
+      %invokefunction &«fidlehandler» ({«args.self» «args.message»})
     %endcase 'idle'
     %case 'generating'
-      %invoke &«fgeneratinghandler» ({«args.self» «args.message»})
+      %invokefunction &«fgeneratinghandler» ({«args.self» «args.message»})
     %endcase 'generating'
     %case 'blocked'
-      %invoke &«fblockedhandler» ({«args.self» «args.message»})
+      %invokefunction &«fblockedhandler» ({«args.self» «args.message»})
     %endcase 'blocked'
 
   %function «fidleenter» ()
@@ -27,7 +27,7 @@
       %case 'begin'
         %mapfunctions «exitstack»
         %overwrite «state» 'generating'
-        %invoke &«fgeneratingenter» ()
+        %invokefunction &«fgeneratingenter» ()
       %endcase 'begin'
     %endswitch «args.message»/etag
   %endfunction «fidlehandler»
@@ -38,6 +38,7 @@
       %condif «files»?empty
           %mapfunctions «exitstack»
           %overwrite «state» 'idle'
+          %invokefunction &«fidledenter» ()
           %yield
       %endcondif «files»?empty
       %condelse
@@ -47,6 +48,7 @@
             %invokeproc «outputqueue»!enqueue ({'kick' ❮trigger❯})
             %mapfunctions «exitstack»
             %overwrite «state» 'blocked'
+            %invokefunction &«fblockedenter» ()
      %endcondelse
    %endcond
   %endfunction «fgeneratingenter»
@@ -64,6 +66,7 @@
         %case 'resume'
           %mapfunctions «exitstack»
           %overwrite «state» 'generating'
+          %invokefunction &«fgeneratingenter» ()
         %endcase 'resume'
       %endswitch «message»/etag
   %endfunction «fblockedhandler»

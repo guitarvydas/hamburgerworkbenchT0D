@@ -12,7 +12,7 @@ Operator =
   | "%endswitch" Operand -- endswitch
   //| Case -- case
   //| "%endcase" Operand -- endcase
-  | "%invoke" EA Args -- invoke
+  | "%invokefunction" EA Args -- invoke
   | "%overwrite" VariableNameRef Operand -- overwrite
   | "%mapfunctions" ListNameRef -- mapfunctions
   | "%verbatim" verbatim -- verbatim
