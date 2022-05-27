@@ -8,9 +8,9 @@ support=--support=${cwd}/support.js
 all: clean dev
 
 dev:
-	@echo script.js created
 	rm -rf script.json
 	make script.js
+	@echo see mainscript.js for progress '(WIP)'
 
 script.json: script.drawio json2js/script.fmt
 	./d2json script.drawio >script.json
@@ -20,7 +20,7 @@ script.js: script.json json2js/script.fmt
 	cp json2js/script.js .
 	(cd scripttranspile ; make preprocess ; cp out.js ..)
 	mv script.js /tmp/script.js
-	cat cos.js out.js spost.js >script.js
+	cat cos.js out.js spost.js >mainscript.js
 
 main: main.js
 	node main.js xxx.drawio

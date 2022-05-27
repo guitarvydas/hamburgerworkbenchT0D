@@ -1,4 +1,7 @@
-foreach.mdsm
+WIP: 
+- to follow along: checkout devforeach.mdsm
+
+goal:
  -> convert triple-backticked quotes to unicode "❮ ... ❯" (verbatim3.ohm + verbatim.fmt)
   -> convert single-backticked quotes to unicode "❮ ... ❯" (verbatim1.ohm + verbatim.fmt)
    -> convert to CFG .sm file (from .md indentation-oriented to brace-bracketed) (mdsm.ohm+mdsm.fmt) 
