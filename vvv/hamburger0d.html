@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      textarea {
+          background-color: oldlace;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>Hamburger D0D Workbench transpiled from testbench.drawio</h1>
+
+    <p id="status" >READY</p>
+
+
+    <!-- Component Operating System -->
+    <script src="../cos.js"></script>
+
+    <!-- Ohm-JS -->
+    <script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script>
+
+    <!-- Components for this app (see, also, hamburgerworkbench0d.drawio) -->
+    <script src="htmlbutton.js"></script>
+    <script src="phrasefaker.js"></script>
+    <script src="textgetter.js"></script>
+    <script src="phraseparser.js"></script>
+    <script src="ordertaker.js"></script>
+    
+    <script src="../json2js/testbench.js"></script>
+
+    <script>
+
+      function genTestPhrase () {
+          console.log ("genTestPhrase");
+          return document.getElementById ('src').value;
+          // return "I Want A Hamburger With Ketchup And Pickles";
+      }
+      
+      function getText (field) {
+          return document.getElementById (field).value;
+      }
+      
+      var testBench = new Test_Bench (null);
+      var htmlbutton = testBench.lookupChild ("HTML Button");
+
+      function buttonhandler () {
+          htmlbutton.handler (htmlbutton, null);
+          htmlbutton.container.wakeup ();
+          let outs = testBench.outputs ();
+          console.log (outs);
+          var result = "";
+          outs.forEach (message => {
+              console.log (message);
+	      var order = message.data;
+	      console.log (order);
+              result += order.item.toString () + '\nextra: ' + order.extras.toString () + '\ncondiments: ' + order.condiments.toString () + "\n\n";
+          });
+          document.getElementById ('output').innerHTML = result;
+      }
+
+    </script>
+
+    <br>
+    <button onclick="buttonhandler ()">Hamburger</button>
+
+<p>test source:</p>
+<textarea id="src" rows="7" cols="90" placeholder="test src" style="background-color:oldlace;">
+  I Want A Hamburger With Cheese And Ketchup
+</textarea>
+
+
+    <p>output:</p>
+    <textarea id="output" rows="17" cols="90" placeholder="output" style="background-color:whitesmoke;">
+    </textarea>
+
+
+
+
+  </body>
+</html>
+
