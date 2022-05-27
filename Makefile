@@ -5,7 +5,7 @@ prep=~/.local/tools/prep
 cwd=`pwd`
 support=--support=${cwd}/support.js
 
-all: clean script.app.js
+all: clean dev
 	@echo script.js created
 
 dev:
