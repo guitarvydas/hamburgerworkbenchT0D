@@ -5,14 +5,17 @@ identity-format=identity-st.fmt
 format=st.fmt
 src=../script.js
 target=script.js
+supportfile=fmt.js
 support=--fmt=${cwd}/fmt.js
 
-all: identity preprocess
+#all: identity preprocess
+all:
+	make dev
 
 identity:
 	${prep} '❮' '❯' ${grammar} ${identity-format} ${support} --errorview --inclusive <${src}
 
-preprocess: ${grammar} ${format}  ${support}
+preprocess: ${grammar} ${format}  ${supportfile}
 	${prep} '❮' '❯' ${grammar} ${format} ${support} --errorview --inclusive <${src} >out.js
 
 verbatim3: send.ohm send.fmt fmt.js foreach.hsm

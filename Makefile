@@ -6,11 +6,11 @@ cwd=`pwd`
 support=--support=${cwd}/support.js
 
 all: clean dev
-	@echo script.js created
 
 dev:
-	rm script.json
-	make
+	@echo script.js created
+	rm -rf script.json
+	make script.js
 
 script.json: script.drawio json2js/script.fmt
 	./d2json script.drawio >script.json

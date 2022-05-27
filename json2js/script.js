@@ -97,15 +97,16 @@ function script_makechildren (container) {
 }
 
 function script_makeconnections (container) {
-    var conn5 = {sender:{name: "noname_0", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_1", etag: "baton"}] };
-    var conn6 = {sender:{name: "noname_1", etag: "env"}, net: "NIY", receivers:  [{name: "noname_2", etag: "env"}] };
-    var conn7 = {sender:{name: "noname_1", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_2", etag: "baton"}] };
-    var conn8 = {sender:{name: "noname_2", etag: "env"}, net: "NIY", receivers:  [{name: "noname_3", etag: "env"}] };
-    var conn9 = {sender:{name: "noname_2", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_3", etag: "baton"}] };
-    var conn10 = {sender:{name: "_me", etag: "env"}, net: "NIY", receivers:  [{name: "noname_0", etag: "env"}] };
-    var conn11 = {sender:{name: "_me", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_0", etag: "baton"}] };
-    var conn12 = {sender:{name: "noname_0", etag: "env"}, net: "NIY", receivers:  [{name: "noname_1", etag: "env"}] };
-    var connections = [ conn5, conn6, conn7, conn8, conn9, conn10, conn11, conn12 ];
+    var conn5 = {sender:{name: "noname_0", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_3", etag: "baton"}] };
+    var conn6 = {sender:{name: "noname_1", etag: "env"}, net: "NIY", receivers:  [{name: "noname_0", etag: "env"}] };
+    var conn7 = {sender:{name: "noname_1", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_0", etag: "baton"}] };
+    var conn8 = {sender:{name: "noname_2", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_0", etag: "done"}] };
+    var conn9 = {sender:{name: "_me", etag: "env"}, net: "NIY", receivers:  [{name: "noname_1", etag: "env"}] };
+    var conn10 = {sender:{name: "_me", etag: "baton"}, net: "NIY", receivers:  [{name: "noname_1", etag: "baton"}] };
+    var conn11 = {sender:{name: "noname_0", etag: "kick"}, net: "NIY", receivers:  [{name: "noname_2", etag: "baton"}] };
+    var conn12 = {sender:{name: "noname_0", etag: "subenv"}, net: "NIY", receivers:  [{name: "noname_2", etag: "env"}] };
+    var conn13 = {sender:{name: "noname_0", etag: "env"}, net: "NIY", receivers:  [{name: "noname_3", etag: "env"}] };
+    var connections = [ conn5, conn6, conn7, conn8, conn9, conn10, conn11, conn12, conn13 ];
     return connections;
 }
 
@@ -137,8 +138,8 @@ function script (container, instancename) {
 
 var noname_0_signature = {
     name: "noname_0",
-    inputs: [{name:"baton", structure:["baton"]}, {name:"env", structure:["env"]}],
-    outputs: [{name:"env", structure:["env"]}, {name:"baton", structure:["baton"]}]
+    inputs: [{name:"baton", structure:["baton"]}, {name:"done", structure:["done"]}, {name:"env", structure:["env"]}],
+    outputs: [{name:"env", structure:["env"]}, {name:"baton", structure:["baton"]}, {name:"kick", structure:["kick"]}, {name:"subenv", structure:["subenv"]}]
 }
 
 

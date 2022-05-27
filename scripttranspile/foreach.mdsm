@@ -11,7 +11,7 @@ var «files»
 ### _enter_
 #### cond `? «files»?empty`
 ##### *yes*
-      _next_ idle`
+      _next_ idle
 ##### *no*
       _send_ subenv `augment env with «files»@pop`
       _send_ kick `trigger`
