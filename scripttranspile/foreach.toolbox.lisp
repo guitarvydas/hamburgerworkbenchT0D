@@ -1,8 +1,8 @@
-(defstruct foreach_0
+(defproto foreach_0
   handler
-  (outputqueue (make-queue))
+  outputqueue
   state
-  exitstack ...
+  exitstack
   files nil
   )
 
@@ -16,18 +16,18 @@
 (defun handler-fforeach_0 (self message)
   (cond 
     ((string= "idle" (foreach_0-state self))
-     (funcall fidlestatehandler self message))
+     (funcall fidlemessagehandler self message))
     ((string= "generating" (foreach_0-state self))
-     (funcall fgeneratingstatehandler self message))
+     (funcall fgeneratingmessagehandler self message))
     ((string= "blocked" (foreach_0-state self))
-     (funcall fblockedstatehandler self message))
+     (funcall fblockedmessagehandler self message))
     (t (panic (format nil "handler-fforeach_0 invalid state ~a" self)))))
 
 (defun fidleenter (self)
   (push fidleexit (foreach_0-exitstack self)))
 (defun fidleexit (self)
   )
-(defun fidlestatehandler (self message)
+(defun fidlemessagehandler (self message)
   (cond ((string= "env" (message-etag message))
 	 (setf (foreach_0-env self) (message-data message)))
 	((string= "begin" (message-etag message))
@@ -52,7 +52,7 @@
 
 (defun fgeneratingexit (self)
   )
-(defun fgeneratingstatehandler (self message)
+(defun fgeneratingmessagehandler (self message)
   (cond ((string= "env" (message-etag message))
 	 (setf (foreach_0-env self) (message-data message)))))
 
@@ -60,7 +60,7 @@
   (push fidlblockedexit (foreach_0-exitstack self)))
 (defun fblockedexit (self)
   )
-(defun blockedstatehandler (self message)
+(defun blockedmessagehandler (self message)
   (cond ((string= "env" (message-etag message))
 	 (setf (foreach_0-env self) (message-data message)))
 	((string= "resme" (message-etag message))

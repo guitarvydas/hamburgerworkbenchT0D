@@ -1,0 +1,6 @@
+(defun test ()
+  (let ((stack (new-stack)))
+    (@ stack 'push 1)
+    (@ stack 'push 2)
+    (let ((r (@ stack 'pop)))
+      (list r stack))))
