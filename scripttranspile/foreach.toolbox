@@ -3,19 +3,22 @@
   %persistent «exitstack» []
   %persistent «handler» &«fforeach_0_handler»
   %persistent «outputqueue» []
+  %persistent «env» {}
+
+  %persistent «files» []
 
   %invokefunction &«fidleenter» ()
 
 %function «fforeach_0_handler» ({«args.self» «args.message»})
   %switch «state»
     %case 'idle'
-      %invokefunction &«fidlehandler» ({«args.self» «args.message»})
+      %invokefunction &«fidlestate» ({«args.self» «args.message»})
     %endcase 'idle'
     %case 'generating'
-      %invokefunction &«fgeneratinghandler» ({«args.self» «args.message»})
+      %invokefunction &«fgeneratingstate» ({«args.self» «args.message»})
     %endcase 'generating'
     %case 'blocked'
-      %invokefunction &«fblockedhandler» ({«args.self» «args.message»})
+      %invokefunction &«fblockedstate» ({«args.self» «args.message»})
     %endcase 'blocked'
   %endswitch «state»
 
@@ -24,10 +27,10 @@
     %overwrite «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
   %endfunction «fidleenter»
   %function «fidleexit» () %endfunction «fidleexit»
-  %function «fidlehandler» ({«args.self» «args.message»})
+  %function «fidlestatehandler» ({«args.self» «args.message»})
     %switch «args.message»/etag
       %case 'env'
-        %overwrite «state» «args.message»/data
+        %overwrite «env» «args.message»/data
       %endcase 'env'
       %case 'begin'
         %mapfunctions «exitstack»
@@ -35,7 +38,7 @@
         %invokefunction &«fgeneratingenter» ()
       %endcase 'begin'
     %endswitch «args.message»/etag
-  %endfunction «fidlehandler»
+  %endfunction «fidlestatehandler»
 
   %function «fgeneratingenter» ()
     %invokeproc «exitstack»!push (&«fgeneratingexit»)
@@ -48,7 +51,7 @@
       %endcondif «files»?empty
       %condelse
             %scope «subenv» «subenv»  «env»!cons («files»/pop)
-              %invokeproc «outputqueue»!enqueue («subenv»)
+              %invokeproc «outputqueue»!enqueue ({'env' «subenv»})
             %endscope «subenv»
             %invokeproc «outputqueue»!enqueue ({'kick' ❮trigger❯})
             %mapfunctions «exitstack»
@@ -59,20 +62,20 @@
   %endfunction «fgeneratingenter»
 
   %function «fgeneratingexit» () %endfunction «fgeneratingexit»
-  %function «fgeneratinghandler» ({«args.self» «args.message»})
+  %function «fgeneratingstatehandler» ({«args.self» «args.message»})
     %switch «message»/etag
       %case 'env'
         %overwrite «state» «args.message»/data
       %endcase 'env'
     %endswitch «message»/etag
-  %endfunction «fgeneratinghandler»
+  %endfunction «fgeneratingstatehandler»
 
   %function «fblockedenter» ()
       %invokeproc «exitstack»!push (&«fblockedexit»)
   %endfunction «fblockedenter»
   %function «fblockedexit» ()
   %endfunction «fblockedexit»
-  %function «fblockedhandler» ({«args.self» «args.message»})
+  %function «fblockedstatehandler» ({«args.self» «args.message»})
       %switch «message»/etag
 	%case 'env'
 	  %overwrite «state» «args.message»/data
@@ -83,6 +86,6 @@
           %invokefunction &«fgeneratingenter» ()
         %endcase 'resume'
       %endswitch «message»/etag
-  %endfunction «fblockedhandler»
+  %endfunction «fblockedstatehandler»
   
 %endconstructor foreach_0
