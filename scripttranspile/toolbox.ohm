@@ -12,8 +12,8 @@ verbatim =
   | stuff+           -- bottom
   
 stuff = ~vsep any
-vsep = bracket | lefthandle
-bracket = "❮" | "❯" | "«" | "»" | "(" | ")" | "{" | "}"
+vsep = bracket
+bracket = "❮" | "❯"
 
 string = 
   | sq (~sq any)* sq
@@ -22,120 +22,72 @@ string =
 sq = "'"
 dq = "\""
 
+number = digit+
+
 }
 
-Names {
+Names <: Basics {
   ModuleName = "=" Name
   PrototypeName = "$" Name
   FieldPrototypeName = "." Name
   FunctionName = "λ" Name
   ParameterName = "▹" Name
   SymbolName = "◦" Name
+  LocalName = "~" Name
+  FieldName = Name
 }
 
-Operands {
+Operands <: Names {
   Operand =
     | Undefined
     | ObjectConstructor
     | SymbolName
+    | Dotted
     | ParameterName
+    | LocalName
     | CompoundObject
     | string
     | number
+    | verbatim
+    | "%yes"
+    | "%no"
 
   ObjectConstructor = "@" Name
   Undefined = "-"
-  CompountObject = ObjectArray | Dict
+  CompoundObject = ObjectArray | Dict
   ObjectArray = "[" Operand* "]"
-  Dict = "{" KOPair* "}"
-  KOPair = Key Operand
+  Dict = "{" KeyOperandPair* "}"
+  KeyOperandPair = Key Operand
   Key = SymbolName
+  Dotted = Operand "." Field
+  Field = FunctionName | ParameterName | LocalName | FieldName
 }
 
-Operators {
+Operators <: Operands {
   Operation =
-    | "%" "module" Prototype Function+ "%" "end" "module"
-    | "%" "function" FunctionName Args| "%" "end" "function"
-    | "%" "prototype" PersistentFieldDecl+ ConstructorDecl "%" "end" "prototype"
+    | "%switch" Operand Case+ "%end" "switch" Operand -- switch
+    | "%call" Operand ObjectArray -- call
+    | "%overwrite" Operand Operand -- overwrite
+    | "%mapλ" Operand -- map
+    | "%cond" CondClause+ CondElse "%end" "cond" -- cond
+    | "%yield" -- yield
+    | "%scope" LocalName Expression "%end" "scope" LocalName -- scope
 
+   Module = "%module" ModuleName Prototype Function+ "%end" "module" ModuleName -- module
+   Function = "%function" FunctionName Args "%end" "function" FunctionName -- function
+   Prototype = "%prototype" PrototypeName PersistentFieldDecl+ ConstructorDecl "%end" "prototype" PrototypeName
    PersistentFieldDecl = "%" "persistent" FieldPrototypeName Operand
    ConstructorDecl = "%" "constructor" Operation* "%" "end" "constructor"
+   Case = "%case" SymbolName Operation+ "%end" "case" SymbolName  -- case
+   CondClause = "%condif" Operand ObjectArray Operation+ "%end" "condif"
+   CondElse = "%condelse" Operation+ "%end" "condelse"
+   Expression =
+     | "%cons" ObjectArray
+     | Operand
 }
 
-Toolbox <: ??? {
 
-Main = Operator+
-
-Operator =
-  | "%constructor" NameDef -- constructor
-  | "%endconstructor" NameRef   -- endconstructor
-  | "%persistent" VariableNameDef Operand -- persistent
-  | "%function" FunctionNameDef Formals Operator+ -- function
-  | "%endfunction"  FunctionNameRef            -- endfunction
-  | "%switch" Operand Case+ -- switch
-  | "%endswitch" Operand -- endswitch
-  //| Case -- case
-  //| "%endcase" Operand -- endcase
-  | "%invokefunction" EA Args -- invoke
-  | "%overwrite" VariableNameRef Operand -- overwrite
-  | "%mapfunctions" ListNameRef -- mapfunctions
-  | "%verbatim" verbatim -- verbatim
-  | "%scope" VariableNameDef VariableNameDef Operand Operator+ -- scope
-  | "%endscope" VariableNameRef -- endscope
-  | "%invokeproc" Operand -- eval
-  | "%cond" CondIf* CondElse? "%endcond" -- cond
-  | "%yield" -- yield
-
-Formals =
-  | "(" "{" VariableNameDef+ "}" ")" -- collection
-  | "(" VariableNameDef ")" -- single
-  | "(" ")" -- noformals
-
-Args =
-  | "(" Operand ")" -- onearg
-  | "(" ")" -- noargs
-
-Case = "%case" Operand Operator+ "%endcase" Operand
-CondIf = "%condif" Operand Operator+ "%endcondif" Operand
-CondElse = "%condelse" Operator+ "%endcondelse"
-
-Operand =
-  | Operand "/" Name         -- attribute
-  | Operand "@" Name         -- impurefunction
-  | Operand "!" Name "(" Operand ")" -- proc1arg
-  | Operand "!" Name "(" ")" -- proc0arg
-  | Operand "?" Name         -- predicate
-  | VariableNameRef           -- varref
-  | EA                        -- effectiveaddress
-  | "[" Operand+ "]"          -- list
-  | "[" "]"                   -- emptylist
-  | "*yes*"                    -- yes  
-  | "*no*"                     -- no
-  | "{" Operand+ "}"          -- synchronouscollection
-  | string                    -- string
-  | verbatim                  -- verbatim
-
-EA = "&" Operand
-
-Variable = 
-  | "«" Name "»" 
-
-VariableNameDef = Variable
-VariableNameRef = Variable
-ListNameRef = Variable
-
-operandkeyword = "*yes*" | "*no*"
-operandkeywordlefthandle = "*"
-operatorlefthandle = "%"
-lefthandle = operatorlefthandle | operandkeywordlefthandle
-
-// I'm undecided about whether function names should look like variable
-// names or unadorned names...
-// (I tried using λ as a prefix, but it looked too busy (I'm probably
-// still stuck in the mindset of evaluating appearances based on
-// human readability))
-FunctionNameDef = Variable
-FunctionNameRef = Variable
+Toolbox <: Operators {
+  Main = Module
 }
-
 
