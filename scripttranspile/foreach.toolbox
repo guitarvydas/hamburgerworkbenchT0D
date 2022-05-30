@@ -1,92 +1,103 @@
-%prototype foreach_0
-  %persistent «state» 'idle'
-  %persistent «exitstack» []
-  %persistent «handler» &«fforeach_0_handler»
-  %persistent «outputqueue» []
-  %persistent «env» {}
+%module foreach_0
 
-  %persistent «files» []
+  %prototype foreach_0
+    %persistent .state nil
+    %persistent .exitstack []
+    %persistent .states [
+      { "idle" { "enter" λidleenter "handler" λidlehandler "exit" λidleexit } }
+      { "generating" { "enter" λgeneratingenter "handler" λgeneratinghandler "exit" λgeneratingexit } }
+      { "generating" { "enter" λgeneratingenter "handler" λgeneratinghandler "exit" λgeneratingexit } }
+    ]
+    %persistent .handler λforeach_0_statehandler
+    %persistent .outputqueue []
+    %persistent .env {}
 
-  %invokefunction &«fidleenter» ()
-%endprototype foreach_0
+    %persistent .files []
 
-%function «fforeach_0_handler» ({«args.self» «args.message»})
-  %switch «state»
-    %case 'idle'
-      %invokefunction &«fidlestate» ({«args.self» «args.message»})
-    %endcase 'idle'
-    %case 'generating'
-      %invokefunction &«fgeneratingstate» ({«args.self» «args.message»})
-    %endcase 'generating'
-    %case 'blocked'
-      %invokefunction &«fblockedstate» ({«args.self» «args.message»})
-    %endcase 'blocked'
-  %endswitch «state»
-%endfunction «fforeach_0_handler»
+    %constructor
+      %call .states.idle.enter
+    %endconstructor
 
-%function «fidleenter» ()
-  %invokeproc «exitstack»!push (&«fidleexit»)
-  %overwrite «files» ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
-%endfunction «fidleenter»
-%function «fidleexit» () %endfunction «fidleexit»
-%function «fidlemessagehandler» ({«args.self» «args.message»})
-  %switch «args.message»/etag
-    %case 'env'
-      %overwrite «env» «args.message»/data
-    %endcase 'env'
-    %case 'begin'
-      %mapfunctions «exitstack»
-      %overwrite «state» 'generating'
-      %invokefunction &«fgeneratingenter» ()
-    %endcase 'begin'
-  %endswitch «args.message»/etag
-%endfunction «fidlemessagehandler»
+  %endprototype foreach_0
 
-%function «fgeneratingenter» ()
-  %invokeproc «exitstack»!push (&«fgeneratingexit»)
-  %cond
-    %condif «files»?empty
-	%mapfunctions «exitstack»
-	%overwrite «state» 'idle'
-	%invokefunction &«fidledenter» ()
-	%yield
-    %endcondif «files»?empty
-    %condelse
-	  %scope «subenv» «subenv»  «env»!cons («files»/pop)
-	    %invokeproc «outputqueue»!enqueue ({'env' «subenv»})
-	  %endscope «subenv»
-	  %invokeproc «outputqueue»!enqueue ({'kick' ❮trigger❯})
-	  %mapfunctions «exitstack»
-	  %overwrite «state» 'blocked'
-	  %invokefunction &«fblockedenter» ()
-   %endcondelse
- %endcond
-%endfunction «fgeneratingenter»
+  %function λforeach_0_statehandler ({«self» «message»})
+    %switch «self».state
+      %case 'idle'
+	%call «self».states.idle.handler ({«self» «message»})
+      %endcase 'idle'
+      %case 'generating'
+	%call «self».states.generating.handler ({«self» «message»})
+      %endcase 'generating'
+      %case 'blocked'
+	%call «self».states.blocked.handler ({«self» «message»})
+      %endcase 'blocked'
+    %endswitch «self».state
+  %endfunction λforeach_0_statehandler
 
-%function «fgeneratingexit» () %endfunction «fgeneratingexit»
-%function «fgeneratingmessagehandler» ({«args.self» «args.message»})
-  %switch «message»/etag
-    %case 'env'
-      %overwrite «state» «args.message»/data
-    %endcase 'env'
-  %endswitch «message»/etag
-%endfunction «fgeneratingmessagehandler»
-
-%function «fblockedenter» ()
-    %invokeproc «exitstack»!push (&«fblockedexit»)
-%endfunction «fblockedenter»
-%function «fblockedexit» ()
-%endfunction «fblockedexit»
-%function «fblockedmessagehandler» ({«args.self» «args.message»})
-    %switch «message»/etag
+  %function λfidleenter («args.self»)
+    %call «self».exitstack.λpush («self».states.idle.exit)
+    %overwrite «self».files ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
+  %endfunction λfidleenter
+  %function λfidleexit () %endfunction «fidleexit»
+  %function λfidlehandler ({«self» «message»})
+    %switch «message».etag
       %case 'env'
-	%overwrite «state» «args.message»/data
+	%overwrite «env» «message».data
       %endcase 'env'
-      %case 'resume'
-	%mapfunctions «exitstack»
+      %case 'begin'
+	%mapλ «self».exitstack
 	%overwrite «state» 'generating'
-	%invokefunction &«fgeneratingenter» ()
-      %endcase 'resume'
-    %endswitch «message»/etag
-%endfunction «fblockedmessagehandler»
+	%call λgeneratingenter ()
+      %endcase 'begin'
+    %endswitch «message».etag
+  %endfunction λfidlemessagehandler
 
+  %function λfgeneratingenter» ()
+    %call «self».exitstack.λpush (&«fgeneratingexit»)
+    %cond
+      %condif «self».files.λempty ()
+	  %mapλ «self».exitstack
+	  %overwrite «state» 'idle'
+	  %call «self».λfidledenter ()
+	  %yield
+      %endcondif «self».files.λempty
+      %condelse
+	    %scope ~subenv «self».files.λpop () «self».env
+	      %call «self».outputqueue.λenqueue ({'env' ~subenv})
+	    %endscope ~subenv
+	    %call «self».outputqueue.λenqueue ({'kick' ❮trigger❯})
+	    %mapλ «self».exitstack
+	    %overwrite «self».state 'blocked'
+	    %call «self».λblockedenter ()
+     %endcondelse
+   %endcond
+  %endfunction λfgeneratingenter
+
+  %function λfgeneratingexit () %endfunction λfgeneratingexit
+  %function λfgeneratinghandler ({«self» «message»})
+    %switch «message».etag
+      %case 'env'
+	%overwrite «self».state «message».data
+      %endcase 'env'
+    %endswitch «message».etag
+  %endfunction λfgeneratingmessagehandler
+
+  %function λfblockedenter ()
+      %call «self».exitstack.λpush (λblockedexit)
+  %endfunction λfblockedenter
+  %function λfblockedexit ()
+  %endfunction λfblockedexit
+  %function λfblockedhandler ({«self» «message»})
+      %switch «message».etag
+	%case 'env'
+	  %overwrite «self».state «message».data
+	%endcase 'env'
+	%case 'resume'
+	  %mapλ «self».exitstack
+	  %overwrite «self».state 'generating'
+	  %call λfgeneratingenter ()
+	%endcase 'resume'
+      %endswitch «message».etag
+  %endfunction λfblockedmessagehandler
+
+%endmodule foreach_0

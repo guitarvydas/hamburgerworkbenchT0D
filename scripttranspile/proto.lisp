@@ -37,4 +37,7 @@
        (insert-pairs self (cdr (cdr pairs)))))))
 
 (defun @ (self func &rest args)
-  (apply (fetch self func) (cons self args)))
+    (apply (fetch self func) (cons self args)))
+
+(defun ? (self key)
+  (fetch self key))
