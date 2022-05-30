@@ -73,7 +73,7 @@ Operators <: Operands {
     | "%mapλ" Operand -- map
     | "%cond" CondClause+ CondElse "%end" "cond" -- cond
     | "%yield" -- yield
-    | "%scope" LocalName Expression "%end" "scope" LocalName -- scope
+    | "%scope" LocalName Expression Operation+ "%end" "scope" LocalName -- scope
 
    Module = "%module" ModuleName Prototype Function+ "%end" "module" ModuleName -- module
    Function = "%function" FunctionName Args Operation* "%end" "function" FunctionName -- function
