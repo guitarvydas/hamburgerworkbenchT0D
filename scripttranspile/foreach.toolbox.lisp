@@ -1,84 +1,94 @@
-(defproto foreach_0
-  handler
-  outputqueue
-  state
-  exitstack
-  files nil
-  )
-
 (defun new-foreach_0 ()
-  (let ((obj (make-object
-	      "handler" 'handler-fforeach_0
-	      "states" 
-	      (make-list
-	       (make-state "idle" "enter" 'fidleenter "handler" 'fidlemessagehandler "exit" 'fieldexit)
-	       (make-state "generating" "enter" 'fgeneratingenter "handler" 'fgeneratingmessagehandler "exit" 'fgeneratingexit)
-	       (make-state "blocked" "enter" 'fblockedenter "handler" 'fblockedmessagehandler "exit" 'fblockedexit))
-	      "outputqueue" nil
-	      "state" nil
-	      "exitstack" nil
-	      "files" nil)))
-    (@
-     (?
-      (?
-       (? obj "states")
-       "idle")
-      "enter"))
-    obj))
+  (let ((obj (new-object
+	      'state nil
+	      'exitstack (new-stack)
+	      'states (new-object
+			'idle (new-object
+				'enter 'idleenter
+				'handler 'idlehandler
+				'exit 'idleexit)
+			'generating (new-object
+				      'enter 'generatingenter
+				      'handler 'generatinghandler
+				      'exit 'generatingexit)
+			'blocked (new-object
+				      'enter 'blockedenter
+				      'handler 'blockedhandler
+				      'exit 'blockedexit))
+	      'handler 'foreach_0_statehandler
+	      'outputqueue (new-queue)
+	      'env (new-environment)
+	      'files (new-list))))
+    (%call (? (? (? obj) 'idle) 'enter))))
 
-(defun handler-fforeach_0 (self message)
-  (cond 
-    ((string= "idle" (? self 'state))
-     (@ (? (? (? self "states") "idle") "handler") self message))
-    ((string= "generating" (foreach_0-state self))
-     (funcall fgeneratingmessagehandler self message))
-    ((string= "blocked" (foreach_0-state self))
-     (funcall fblockedmessagehandler self message))
-    (t (panic (format nil "handler-fforeach_0 invalid state ~a" self)))))
-
-(defun fidleenter (self)
-  (push fidleexit (foreach_0-exitstack self)))
-(defun fidleexit (self)
-  )
-(defun fidlemessagehandler (self message)
-  (cond ((string= "env" (message-etag message))
-	 (setf (foreach_0-env self) (message-data message)))
-	((string= "begin" (message-etag message))
-	 (mapc #'(lambda (f) (funcall f self)) (foreach_0-exitstack self))
-	 (setf (foreach_0-state self) "generating")
-	 (funcall fgeneratingenter self))))
-
-(defun fgeneratingenter (self)
+(defun foreach_0_statehandler (self message)
   (cond
-    ((empty (foreach_0-files self))
-     (mapc #'(lambda (f) (funcall f self)) (foreach_0-exitstack self))
-     (setf (foreach_0-state self) "idle")
-     (funcall fidleenter self)
-     (return-from fgeneratingenter))
+    ((eq 'idle (? (? self) state))
+     (%call (? (? (? (? self) 'states) 'idle) 'handler) self message))
+    ((eq 'idle (? (? self) state))
+     )
+    ((eq 'idle (? (? self) state))
+     )
+    (t (panic 'foreach_0_statehandler))))
+
+
+(defun idleenter (self)
+  (%call (? (? (? self) 'exitstack) 'push) (? (? (? (? self) 'states) 'idle) 'exit))
+  (%overwrite (? (? self) 'files ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯)))
+
+(defun idleexit (self) (declare (ignore self)))
+
+(defun idlehandler (self message)
+  (cond
+    ((eq 'env (? message 'etag))
+     (%overwrite (? self 'env) (? message 'data)))
+    ((eq 'begin (? message 'etag))
+     (mapc #'(lambda (func) (funcall func self)) (? self 'exitstack))
+     (%overwrite (? self 'state) 'generating)
+     (%call (? (? self) 'generatingenter) self))))
+    
+  
+
+
+(defun generatingenter (self)
+  (%call (? (? (? self) 'exitstack) 'push) (? (? (? (? self) 'states) 'generating) 'exit))
+  (cond
+
+    ((? (? (? self) 'files) 'empty)
+     (mapc #'(lambda (func) (funcall func self)) (? self 'exitstack))
+     (%overwrite (? self 'state) 'idle)
+     (%call (? (? self) 'idleenter) self)
+     (return-from generatingenter))
+
     (t
-     (let ((subenv (cons (pop (foreach_0-files self)) (foreach_0-env self))))
-       (funcall (enqueue (foreach_0-outputqueue self) (list "env" subenv))))
-     (funcall (enqueue (foreach_0-outputqueue self) (list "kick" subenv)))
-     (mapc #'(lambda (f) (funcall f self)) (foreach_0-exitstack self))
-     (setf (foreach_0-state self) "blocked")
-     (funcall fblockedenter self))))
+     (let ((subenv (cons (? (? (? self) 'files) 'pop) (? (? self) 'env))))
+       (%call (? (? (? self) 'outputqueue) 'enqueue) (list 'env subenv)))
+     (%call (? (? (? self) 'outputqueue) 'enqueue) (list 'kick ❮trigger❯))
+     (mapc #'(lambda (func) (funcall func self)) (? self 'exitstack))
+     (%overwrite (? self 'state) 'blocked)
+     (%call (? (? self) 'blockedenter) self))))
 
-(defun fgeneratingexit (self)
-  )
-(defun fgeneratingmessagehandler (self message)
-  (cond ((string= "env" (message-etag message))
-	 (setf (foreach_0-env self) (message-data message)))))
+(defun generatingexit (self) (declare (ignore self)))
 
-(defun fblockedenter (self)
-  (push fidlblockedexit (foreach_0-exitstack self)))
-(defun fblockedexit (self)
-  )
-(defun blockedmessagehandler (self message)
-  (cond ((string= "env" (message-etag message))
-	 (setf (foreach_0-env self) (message-data message)))
-	((string= "resme" (message-etag message))
-	 (mapc #'(lambda (f) (funcall f self)) (foreach_0-exitstack self))
-	 (setf (foreach_0-state self) "generating")
-	 (funcall fgeneratingenter self))))
+(defun generatinghandler (self message)
+  (cond
+    ((eq 'env (? message 'etag))
+     (%overwrite (? self 'env) (? message 'data)))))  
+     
+    
+  
+(defun blockedenter (self)
+  (%call (? (? (? self) 'exitstack) 'push) (? (? (? (? self) 'states) 'blocked) 'exit)))
 
+(defun blockedexit (self) (declare (ignore self)))
 
+(defun blockedhandler (self message)
+  (cond
+    ((eq 'env (? message 'etag))
+     (%overwrite (? self 'env) (? message 'data)))
+    ((eq 'resume (? message 'etag))
+     (mapc #'(lambda (func) (funcall func self)) (? self 'exitstack))
+     (%overwrite (? self 'state) 'generating)
+     (%call (? (? self) 'generatingenter) self))))
+  
+  

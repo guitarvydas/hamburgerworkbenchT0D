@@ -1,4 +1,68 @@
-pseudo {
+Basics {
+Name (Name) = firstletter followletter*
+firstletter = letter | "_" | "." | "λ"
+followletter = alnum | firstletter
+
+
+NameDef = Name
+NameRef = Name
+
+verbatim =
+  | "❮" verbatim "❯" -- rec
+  | stuff+           -- bottom
+  
+stuff = ~vsep any
+vsep = bracket | lefthandle
+bracket = "❮" | "❯" | "«" | "»" | "(" | ")" | "{" | "}"
+
+string = 
+  | sq (~sq any)* sq
+  | dq (~dq any)* dq
+
+sq = "'"
+dq = "\""
+
+}
+
+Names {
+  ModuleName = "=" Name
+  PrototypeName = "$" Name
+  FieldPrototypeName = "." Name
+  FunctionName = "λ" Name
+  ParameterName = "▹" Name
+  SymbolName = "◦" Name
+}
+
+Operands {
+  Operand =
+    | Undefined
+    | ObjectConstructor
+    | SymbolName
+    | ParameterName
+    | CompoundObject
+    | string
+    | number
+
+  ObjectConstructor = "@" Name
+  Undefined = "-"
+  CompountObject = ObjectArray | Dict
+  ObjectArray = "[" Operand* "]"
+  Dict = "{" KOPair* "}"
+  KOPair = Key Operand
+  Key = SymbolName
+}
+
+Operators {
+  Operation =
+    | "%" "module" Prototype Function+ "%" "end" "module"
+    | "%" "function" FunctionName Args| "%" "end" "function"
+    | "%" "prototype" PersistentFieldDecl+ ConstructorDecl "%" "end" "prototype"
+
+   PersistentFieldDecl = "%" "persistent" FieldPrototypeName Operand
+   ConstructorDecl = "%" "constructor" Operation* "%" "end" "constructor"
+}
+
+Toolbox <: ??? {
 
 Main = Operator+
 
@@ -64,27 +128,6 @@ operandkeyword = "*yes*" | "*no*"
 operandkeywordlefthandle = "*"
 operatorlefthandle = "%"
 lefthandle = operatorlefthandle | operandkeywordlefthandle
-Name (Name) = firstletter followletter*
-firstletter = letter | "_" | "." | "λ"
-followletter = alnum | firstletter
-
-NameDef = Name
-NameRef = Name
-
-verbatim =
-  | "❮" verbatim "❯" -- rec
-  | stuff+           -- bottom
-  
-stuff = ~vsep any
-vsep = bracket | lefthandle
-bracket = "❮" | "❯" | "«" | "»" | "(" | ")" | "{" | "}"
-
-string = 
-  | sq (~sq any)* sq
-  | dq (~dq any)* dq
-
-sq = "'"
-dq = "\""
 
 // I'm undecided about whether function names should look like variable
 // names or unadorned names...
@@ -93,7 +136,6 @@ dq = "\""
 // human readability))
 FunctionNameDef = Variable
 FunctionNameRef = Variable
-
 }
 
 

@@ -1,103 +1,103 @@
-%module foreach_0
+%module =foreach_0
 
-  %prototype foreach_0
-    %persistent .state nil
-    %persistent .exitstack []
+  %prototype $foreach_0
+    %persistent .state -
+    %persistent .exitstack @Stack
     %persistent .states [
-      { "idle" { "enter" λidleenter "handler" λidlehandler "exit" λidleexit } }
-      { "generating" { "enter" λgeneratingenter "handler" λgeneratinghandler "exit" λgeneratingexit } }
-      { "generating" { "enter" λgeneratingenter "handler" λgeneratinghandler "exit" λgeneratingexit } }
+      { ◦idle { ◦enter λidleenter ◦handler λidlehandler ◦exit λidleexit } }
+      { ◦generating { ◦enter λgeneratingenter ◦handler λgeneratinghandler ◦exit λgeneratingexit } }
+      { ◦blocked { ◦enter λblockedenter ◦handler λblockedhandler ◦exit λblockedexit } }
     ]
     %persistent .handler λforeach_0_statehandler
-    %persistent .outputqueue []
-    %persistent .env {}
+    %persistent .outputqueue @Queue
+    %persistent .env @Environment
 
-    %persistent .files []
+    %persistent .files @List
 
     %constructor
-      %call .states.idle.enter
-    %endconstructor
+      %call .states.idle.λenter
+    %end constructor
 
-  %endprototype foreach_0
+  %end prototype $foreach_0
 
-  %function λforeach_0_statehandler ({«self» «message»})
-    %switch «self».state
-      %case 'idle'
-	%call «self».states.idle.handler ({«self» «message»})
-      %endcase 'idle'
-      %case 'generating'
-	%call «self».states.generating.handler ({«self» «message»})
-      %endcase 'generating'
-      %case 'blocked'
-	%call «self».states.blocked.handler ({«self» «message»})
-      %endcase 'blocked'
-    %endswitch «self».state
-  %endfunction λforeach_0_statehandler
+  %function λforeach_0_statehandler [▹self ▹message]
+    %switch ▹self.state
+      %case ◦idle
+	%call ▹self.states.idle.handler [▹self ▹message]
+      %end case ◦idle
+      %case ◦generating
+	%call ▹self.states.generating.handler [▹self ▹message]
+      %end case ◦generating
+      %case ◦blocked
+	%call ▹self.states.blocked.handler [▹self ▹message]
+      %end case ◦blocked
+    %end switch ▹self.state
+  %end function λforeach_0_statehandler
 
-  %function λfidleenter («args.self»)
-    %call «self».exitstack.λpush («self».states.idle.exit)
-    %overwrite «self».files ❮list files '/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS'❯
-  %endfunction λfidleenter
-  %function λfidleexit () %endfunction «fidleexit»
-  %function λfidlehandler ({«self» «message»})
-    %switch «message».etag
-      %case 'env'
-	%overwrite «env» «message».data
-      %endcase 'env'
-      %case 'begin'
-	%mapλ «self».exitstack
-	%overwrite «state» 'generating'
-	%call λgeneratingenter ()
-      %endcase 'begin'
-    %endswitch «message».etag
-  %endfunction λfidlemessagehandler
+  %function λfidleenter [▹self]
+    %call ▹self.exitstack.λpush [▹self.states.idle.exit]
+    %overwrite ▹self.files ❮list files  "/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS"❯
+  %end function λfidleenter
+  %function λfidleexit [▹self] %end function ▹fidleexit
+  %function λfidlehandler [▹self ▹message]
+    %switch ▹message.etag
+      %case   ◦env
+	%overwrite ▹self.env ▹message.data
+      %end case ◦env
+      %case ◦begin
+	%mapλ ▹self.exitstack
+	%overwrite ▹state ◦generating
+	%call λgeneratingenter [▹self]
+      %end case ◦begin
+    %end switch ▹message.etag
+  %end function λfidlemessagehandler
 
-  %function λfgeneratingenter» ()
-    %call «self».exitstack.λpush (&«fgeneratingexit»)
+  %function λfgeneratingenter [▹self]
+    %call ▹self.exitstack.λpush [▹self.states.generating.exit]
     %cond
-      %condif «self».files.λempty ()
-	  %mapλ «self».exitstack
-	  %overwrite «state» 'idle'
-	  %call «self».λfidledenter ()
+      %condif ▹self.files.λempty []
+	  %mapλ ▹self.exitstack
+	  %overwrite ▹state ◦idle
+	  %call ▹self.λfidledenter [▹self]
 	  %yield
-      %endcondif «self».files.λempty
+      %end condif ▹self.files.λempty
       %condelse
-	    %scope ~subenv «self».files.λpop () «self».env
-	      %call «self».outputqueue.λenqueue ({'env' ~subenv})
-	    %endscope ~subenv
-	    %call «self».outputqueue.λenqueue ({'kick' ❮trigger❯})
-	    %mapλ «self».exitstack
-	    %overwrite «self».state 'blocked'
-	    %call «self».λblockedenter ()
-     %endcondelse
-   %endcond
-  %endfunction λfgeneratingenter
+	    %scope ~subenv %cons [▹self.files.λpop [] ▹self.env]
+	      %call ▹self.outputqueue.λenqueue [◦env ~subenv]
+	    %end scope ~subenv
+	    %call ▹self.outputqueue.λenqueue [◦kick ❮trigger❯]
+	    %mapλ ▹self.exitstack
+	    %overwrite ▹self.state ◦blocked
+	    %call ▹self.λblockedenter []
+     %end condelse
+   %end cond
+  %end function λfgeneratingenter
 
-  %function λfgeneratingexit () %endfunction λfgeneratingexit
-  %function λfgeneratinghandler ({«self» «message»})
-    %switch «message».etag
-      %case 'env'
-	%overwrite «self».state «message».data
-      %endcase 'env'
-    %endswitch «message».etag
-  %endfunction λfgeneratingmessagehandler
+  %function λfgeneratingexit [▹self ▹message] %end function λfgeneratingexit
+  %function λfgeneratinghandler [▹self ▹message]
+    %switch ▹message.etag
+      %case ◦env
+	%overwrite ▹self.state ▹message.data
+      %end case ◦env
+    %end switch ▹message.etag
+  %end function λfgeneratingmessagehandler
 
-  %function λfblockedenter ()
-      %call «self».exitstack.λpush (λblockedexit)
-  %endfunction λfblockedenter
-  %function λfblockedexit ()
-  %endfunction λfblockedexit
-  %function λfblockedhandler ({«self» «message»})
-      %switch «message».etag
-	%case 'env'
-	  %overwrite «self».state «message».data
-	%endcase 'env'
-	%case 'resume'
-	  %mapλ «self».exitstack
-	  %overwrite «self».state 'generating'
-	  %call λfgeneratingenter ()
-	%endcase 'resume'
-      %endswitch «message».etag
-  %endfunction λfblockedmessagehandler
+  %function λfblockedenter [▹self]
+      %call ▹self.exitstack.λpush [λblockedexit]
+  %end function λfblockedenter
+  %function λfblockedexit [▹self]
+  %end function λfblockedexit
+  %function λfblockedhandler [▹self ▹message]
+      %switch ▹message.etag
+	%case ◦env
+	  %overwrite ▹self.state ▹message.data
+	%end case ◦env
+	%case ◦resume
+	  %mapλ ▹self.exitstack
+	  %overwrite ▹self.state ◦generating
+	  %call λfgeneratingenter []
+	%end case ◦resume
+      %end switch ▹message.etag
+  %end function λfblockedmessagehandler
 
-%endmodule foreach_0
+%end module =foreach_0
