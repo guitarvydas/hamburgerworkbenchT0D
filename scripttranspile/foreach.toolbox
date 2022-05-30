@@ -14,8 +14,8 @@
 
     %persistent .files @List
 
-    %constructor
-      %call .states.idle.λenter
+    %constructor [▹self]
+      %call ▹self.states.idle.λenter
     %end constructor
 
   %end prototype $foreach_0

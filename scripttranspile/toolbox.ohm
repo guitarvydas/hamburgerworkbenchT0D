@@ -1,28 +1,27 @@
 Basics {
-Name (Name) = firstletter followletter*
-firstletter = letter | "_" | "." | "λ"
-followletter = alnum | firstletter
+  Main = Name+
+  Name (Name) = firstletter followletter*
+  firstletter = letter | "_"
+  followletter = alnum | firstletter
 
+  verbatim =     | "❮" verbatiminnards "❯"
 
-NameDef = Name
-NameRef = Name
+  verbatiminnards =
+    | "❮" verbatiminnards "❯" -- rec
+    | stuff+           -- bottom
 
-verbatim =
-  | "❮" verbatim "❯" -- rec
-  | stuff+           -- bottom
-  
-stuff = ~vsep any
-vsep = bracket
-bracket = "❮" | "❯"
+  stuff = ~vsep any
+  vsep = bracket
+  bracket = "❮" | "❯" 
 
-string = 
-  | sq (~sq any)* sq
-  | dq (~dq any)* dq
+  string = 
+    | sq (~sq any)* sq
+    | dq (~dq any)* dq
 
-sq = "'"
-dq = "\""
+  sq = "'"
+  dq = "\""
 
-number = digit+
+  number = digit+
 
 }
 
@@ -76,8 +75,8 @@ Operators <: Operands {
    Module = "%module" ModuleName Prototype Function+ "%end" "module" ModuleName -- module
    Function = "%function" FunctionName Args "%end" "function" FunctionName -- function
    Prototype = "%prototype" PrototypeName PersistentFieldDecl+ ConstructorDecl "%end" "prototype" PrototypeName
-   PersistentFieldDecl = "%" "persistent" FieldPrototypeName Operand
-   ConstructorDecl = "%" "constructor" Operation* "%" "end" "constructor"
+   PersistentFieldDecl = "%persistent" FieldPrototypeName Operand
+   ConstructorDecl = "%constructor" "[" "▹self" "]" Operation* "%end" "constructor"
    Case = "%case" SymbolName Operation+ "%end" "case" SymbolName  -- case
    CondClause = "%condif" Operand ObjectArray Operation+ "%end" "condif"
    CondElse = "%condelse" Operation+ "%end" "condelse"
@@ -89,6 +88,7 @@ Operators <: Operands {
 
 
 Toolbox <: Operators {
-  Main = Module
+  Main := Module
 }
+
 
