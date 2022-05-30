@@ -1,8 +1,10 @@
 Basics {
   Main = Name+
   Name (Name) = firstletter followletter*
-  firstletter = letter | "_"
-  followletter = alnum | firstletter
+  firstletter = idletter | "_"
+  followletter = digit | firstletter
+
+  idletter = "A" .."Z" | "a" .. "z"
 
   verbatim =     | "❮" verbatiminnards "❯"
 
@@ -44,6 +46,7 @@ Operands <: Names {
     | Dotted
     | ParameterName
     | LocalName
+    | FunctionName
     | CompoundObject
     | string
     | number
