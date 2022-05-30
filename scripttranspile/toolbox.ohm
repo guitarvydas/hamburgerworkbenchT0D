@@ -82,8 +82,9 @@ Operators <: Operands {
    CondClause = "%condif" Operand ObjectArray Operation+ "%end" "condif"
    CondElse = "%condelse" Operation+ "%end" "condelse"
    Expression =
-     | "%cons" ObjectArray
-     | Operand
+     | "%cons" ObjectArray -- cons
+     | Operand -- simple
+   Args = "[" ParameterName* "]"
 }
 
 
