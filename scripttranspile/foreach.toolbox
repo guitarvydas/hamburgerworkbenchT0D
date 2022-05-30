@@ -38,7 +38,7 @@
     %call ▹self.exitstack.λpush [▹self.states.idle.exit]
     %overwrite ▹self.files ❮list files  "/Users/tarvydas/temp/ps/@book-Hamburger Workbench - A Frivolous Introduction to Ohm-JS"❯
   %end function λfidleenter
-  %function λfidleexit [▹self] %end function ▹fidleexit
+  %function λfidleexit [▹self] %end function λfidleexit
   %function λfidlehandler [▹self ▹message]
     %switch ▹message.etag
       %case   ◦env

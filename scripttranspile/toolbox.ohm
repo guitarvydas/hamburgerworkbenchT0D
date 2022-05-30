@@ -81,7 +81,7 @@ Operators <: Operands {
    PersistentFieldDecl = "%persistent" FieldPrototypeName Operand
    ConstructorDecl = "%constructor" "[" "▹self" "]" Operation* "%end" "constructor"
    Case = "%case" SymbolName Operation+ "%end" "case" SymbolName  -- case
-   CondClause = "%condif" Operand ObjectArray Operation+ "%end" "condif"
+   CondClause = "%condif" Operand ObjectArray Operation+ "%end" "condif" Operand
    CondElse = "%condelse" Operation+ "%end" "condelse"
    Expression =
      | "%cons" ObjectArray -- cons
