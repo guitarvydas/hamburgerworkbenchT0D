@@ -15,7 +15,7 @@
     %persistent .files @List
 
     %constructor [▹self]
-      %call ▹self.states.idle.λenter
+      %call ▹self.states.idle.λenter [▹self]
     %end constructor
 
   %end prototype $foreach_0
@@ -68,7 +68,7 @@
 	    %call ▹self.outputqueue.λenqueue [◦kick ❮trigger❯]
 	    %mapλ ▹self.exitstack
 	    %overwrite ▹self.state ◦blocked
-	    %call ▹self.λblockedenter []
+	    %call ▹self.λblockedenter [▹self]
      %end condelse
    %end cond
   %end function λfgeneratingenter
@@ -95,7 +95,7 @@
 	%case ◦resume
 	  %mapλ ▹self.exitstack
 	  %overwrite ▹self.state ◦generating
-	  %call λfgeneratingenter []
+	  %call λfgeneratingenter [▹self]
 	%end case ◦resume
       %end switch ▹message.etag
   %end function λfblockedmessagehandler

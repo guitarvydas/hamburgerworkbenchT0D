@@ -76,7 +76,7 @@ Operators <: Operands {
     | "%scope" LocalName Expression "%end" "scope" LocalName -- scope
 
    Module = "%module" ModuleName Prototype Function+ "%end" "module" ModuleName -- module
-   Function = "%function" FunctionName Args "%end" "function" FunctionName -- function
+   Function = "%function" FunctionName Args Operation* "%end" "function" FunctionName -- function
    Prototype = "%prototype" PrototypeName PersistentFieldDecl+ ConstructorDecl "%end" "prototype" PrototypeName
    PersistentFieldDecl = "%persistent" FieldPrototypeName Operand
    ConstructorDecl = "%constructor" "[" "▹self" "]" Operation* "%end" "constructor"
