@@ -28,8 +28,8 @@
 
 (defun handler-fforeach_0 (self message)
   (cond 
-    ((string= "idle" (fetch self 'state))
-     (funcall fidlemessagehandler self message))
+    ((string= "idle" (? self 'state))
+     (@ (? (? (? self "states") "idle") "handler") self message))
     ((string= "generating" (foreach_0-state self))
      (funcall fgeneratingmessagehandler self message))
     ((string= "blocked" (foreach_0-state self))
