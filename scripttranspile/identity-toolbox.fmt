@@ -1,135 +1,94 @@
-Main 
- [ Name  @ ] = [[${Name}${}]] 
-Name 
- [ firstletter  followletter  @ ] = [[${firstletter}${followletter}${}]] 
-firstletter 
- [ idletter ] = [[${idletter}]] 
-_ [ k_underscore ] = [[${k_underscore}]] 
-followletter 
- [ digit ] = [[${digit}]] 
-_ [ firstletter ] = [[${firstletter}]] 
-idletter 
- [] = [[]] 
-_ [] = [[]] 
-verbatim 
- [ k_vlb  verbatiminnards  k_vrb ] = [[${k_vlb}${verbatiminnards}${k_vrb}]] 
-verbatiminnards 
-_rec [ k_vlb  verbatiminnards  k_vrb ] = [[${k_vlb}${verbatiminnards}${k_vrb}]] 
-_bottom [ stuff  @ ] = [[${stuff}${}]] 
-stuff 
- [ vsep  any ] = [[${vsep}${any}]] 
-vsep 
- [ bracket ] = [[${bracket}]] 
-bracket 
- [ k_vlb ] = [[${k_vlb}]] 
-_ [ k_vrb ] = [[${k_vrb}]] 
-string 
-_ [ sq  sq  any  @??? (~)  sq ] = [[${sq}${sq}${any}${??? (~)}${sq}]] 
-_ [ dq  dq  any  @??? (~)  dq ] = [[${dq}${dq}${any}${??? (~)}${dq}]] 
-sq 
- [ k_q ] = [[${k_q}]] 
-dq 
- [ k_dq ] = [[${k_dq}]] 
-number 
- [ digit  @ ] = [[${digit}${}]] }
+Main  [ @Name ] = [[${Name}]]
+Name  [ firstletter  @followletter ] = [[${firstletter}${followletter}]]
+firstletter  [ idletter ] = [[${idletter}]]
+followletter  [ digit ] = [[${digit}]]
+idletter  [] = [[]]
+_ [] = [[]]
+verbatim  [ k_vlb  verbatiminnards  k_vrb ] = [[${k_vlb}${verbatiminnards}${k_vrb}]]
+verbatiminnards _rec [ k_vlb  verbatiminnards  k_vrb ] = [[${k_vlb}${verbatiminnards}${k_vrb}]]
+_bottom [ @stuff ] = [[${stuff}]]
+stuff  [ vsep  any ] = [[${vsep}${any}]]
+vsep  [ bracket ] = [[${bracket}]]
+bracket  [ k_vlb ] = [[${k_vlb}]]
+_ [ k_vrb ] = [[${k_vrb}]]
+string _ [ sq  sq  any  @??? (~)  sq ] = [[${sq}${sq}${any}${??? (~)}${sq}]]
+_ [ dq  dq  any  @??? (~)  dq ] = [[${dq}${dq}${any}${??? (~)}${dq}]]
+sq  [ k_q ] = [[${k_q}]]
+dq  [ k_dq ] = [[${k_dq}]]
+number  [ @digit ] = [[${digit}]]
+}
 
 Names<:Basics{
 
-
-ModuleName 
- [ k_equal  Name ] = [[${k_equal}${Name}]] 
-PrototypeName 
- [ k_dollar  Name ] = [[${k_dollar}${Name}]] 
-FieldPrototypeName 
- [ k_dot  Name ] = [[${k_dot}${Name}]] 
-FunctionName 
- [ k_lambda  Name ] = [[${k_lambda}${Name}]] 
-ParameterName 
- [ k_param  Name ] = [[${k_param}${Name}]] 
-SymbolName 
- [ k_symbol  Name ] = [[${k_symbol}${Name}]] 
-LocalName 
- [ k_tilde  Name ] = [[${k_tilde}${Name}]] 
-FieldName 
- [ Name ] = [[${Name}]] }
+ModuleName  [ k_equal  Name ] = [[${k_equal}${Name}]]
+PrototypeName  [ k_dollar  Name ] = [[${k_dollar}${Name}]]
+FieldPrototypeName  [ k_dot  Name ] = [[${k_dot}${Name}]]
+FunctionName  [ k_lambda  Name ] = [[${k_lambda}${Name}]]
+ParameterName  [ k_param  Name ] = [[${k_param}${Name}]]
+SymbolName  [ k_symbol  Name ] = [[${k_symbol}${Name}]]
+LocalName  [ k_tilde  Name ] = [[${k_tilde}${Name}]]
+FieldName  [ Name ] = [[${Name}]]
+}
 
 Operands<:Names{
 
-
-Operand 
-_undefined [ Undefined ] = [[${Undefined}]] 
-_constructor [ ObjectConstructor ] = [[${ObjectConstructor}]] 
-_symbol [ SymbolName ] = [[${SymbolName}]] 
-_dotted [ Dotted ] = [[${Dotted}]] 
-_parameter [ ParameterName ] = [[${ParameterName}]] 
-_local [ LocalName ] = [[${LocalName}]] 
-_function [ FunctionName ] = [[${FunctionName}]] 
-_compound [ CompoundObject ] = [[${CompoundObject}]] 
-_string [ string ] = [[${string}]] 
-_number [ number ] = [[${number}]] 
-_verbatim [ verbatim ] = [[${verbatim}]] 
-_yes [ kp_yes ] = [[${kp_yes}]] 
-_no [ kp_no ] = [[${kp_no}]] 
-ObjectConstructor 
- [ k_at  Name ] = [[${k_at}${Name}]] 
-Undefined 
- [ k_dash ] = [[${k_dash}]] 
-CompoundObject 
- [ ObjectArray ] = [[${ObjectArray}]] 
-_ [ Dict ] = [[${Dict}]] 
-ObjectArray 
- [ k_lb  Operand  @  k_rb ] = [[${k_lb}${Operand}${}${k_rb}]] 
-Dict 
- [ k_lbb  KeyOperandPair  @  k_rbb ] = [[${k_lbb}${KeyOperandPair}${}${k_rbb}]] 
-KeyOperandPair 
- [ Key  Operand ] = [[${Key}${Operand}]] 
-Key 
- [ SymbolName ] = [[${SymbolName}]] 
-Dotted 
- [ Operand  k_dot  Field ] = [[${Operand}${k_dot}${Field}]] 
-Field 
- [ FunctionName ] = [[${FunctionName}]] 
-_ [ ParameterName ] = [[${ParameterName}]] 
-_ [ LocalName ] = [[${LocalName}]] 
-_ [ FieldName ] = [[${FieldName}]] }
+Operand _undefined [ Undefined ] = [[${Undefined}]]
+_constructor [ ObjectConstructor ] = [[${ObjectConstructor}]]
+_symbol [ SymbolName ] = [[${SymbolName}]]
+_dotted [ Dotted ] = [[${Dotted}]]
+_parameter [ ParameterName ] = [[${ParameterName}]]
+_local [ LocalName ] = [[${LocalName}]]
+_function [ FunctionName ] = [[${FunctionName}]]
+_compound [ CompoundObject ] = [[${CompoundObject}]]
+_string [ string ] = [[${string}]]
+_number [ number ] = [[${number}]]
+_verbatim [ verbatim ] = [[${verbatim}]]
+_yes [ kp_yes ] = [[${kp_yes}]]
+_no [ kp_no ] = [[${kp_no}]]
+ObjectConstructor  [ k_at  Name ] = [[${k_at}${Name}]]
+Undefined  [ k_dash ] = [[${k_dash}]]
+CompoundObject  [ ObjectArray ] = [[${ObjectArray}]]
+_ [ Dict ] = [[${Dict}]]
+ObjectArray  [ k_lb  @Operand  k_rb ] = [[${k_lb}${Operand}${k_rb}]]
+Dict  [ k_lbb  @KeyOperandPair  k_rbb ] = [[${k_lbb}${KeyOperandPair}${k_rbb}]]
+KeyOperandPair  [ Key  Operand ] = [[${Key}${Operand}]]
+Key  [ SymbolName ] = [[${SymbolName}]]
+Dotted  [ Operand  k_dot  Field ] = [[${Operand}${k_dot}${Field}]]
+Field  [ FunctionName ] = [[${FunctionName}]]
+_ [ ParameterName ] = [[${ParameterName}]]
+_ [ LocalName ] = [[${LocalName}]]
+_ [ FieldName ] = [[${FieldName}]]
+}
 
 Operators<:Operands{
 
 
-
-Operation 
-_switch [ kp_switch  Operand  Case  @  kp_end  k_switch  Operand ] = [[${kp_switch}${Operand}${Case}${}${kp_end}${k_switch}${Operand}]] 
-_call [ kp_call  Operand  ObjectArray ] = [[${kp_call}${Operand}${ObjectArray}]] 
-_overwrite [ kp_overwrite  Operand  Operand ] = [[${kp_overwrite}${Operand}${Operand}]] 
-_map [ kp_map  Operand ] = [[${kp_map}${Operand}]] 
-_cond [ kp_cond  CondClause  @  CondElse  kp_end  k_cond ] = [[${kp_cond}${CondClause}${}${CondElse}${kp_end}${k_cond}]] 
-_yield [ kp_yield ] = [[${kp_yield}]] 
-_scope [ kp_scope  LocalName  Expression  Operation  @  kp_end  k_scope  LocalName ] = [[${kp_scope}${LocalName}${Expression}${Operation}${}${kp_end}${k_scope}${LocalName}]] 
-Module 
- [ kp_module  ModuleName  Prototype  Function  @  kp_end  k_module  ModuleName ] = [[${kp_module}${ModuleName}${Prototype}${Function}${}${kp_end}${k_module}${ModuleName}]] 
-Function 
- [ kp_function  FunctionName  Args  Operation  @  kp_end  k_function  FunctionName ] = [[${kp_function}${FunctionName}${Args}${Operation}${}${kp_end}${k_function}${FunctionName}]] 
-Prototype 
- [ kp_prototype  PrototypeName  PersistentFieldDecl  @  ConstructorDecl  kp_end  k_prototype  PrototypeName ] = [[${kp_prototype}${PrototypeName}${PersistentFieldDecl}${}${ConstructorDecl}${kp_end}${k_prototype}${PrototypeName}]] 
-PersistentFieldDecl 
- [ kp_persistent  FieldPrototypeName  Operand ] = [[${kp_persistent}${FieldPrototypeName}${Operand}]] 
-ConstructorDecl 
- [ kp_constructor  k_lb  k_self  k_rb  Operation  @  kp_end  k_constructor ] = [[${kp_constructor}${k_lb}${k_self}${k_rb}${Operation}${}${kp_end}${k_constructor}]] 
-Case 
- [ kp_case  SymbolName  Operation  @  kp_end  k_case  SymbolName ] = [[${kp_case}${SymbolName}${Operation}${}${kp_end}${k_case}${SymbolName}]] 
-CondClause 
- [ kp_condif  Operand  ObjectArray  Operation  @  kp_end  k_condif  Operand ] = [[${kp_condif}${Operand}${ObjectArray}${Operation}${}${kp_end}${k_condif}${Operand}]] 
-CondElse 
- [ kp_condelse  Operation  @  kp_end  k_condelse ] = [[${kp_condelse}${Operation}${}${kp_end}${k_condelse}]] 
-Expression 
-_cons [ kp_cons  ObjectArray ] = [[${kp_cons}${ObjectArray}]] 
-_simple [ Operand ] = [[${Operand}]] 
-Args 
- [ k_lb  @ParameterName k_rb ] = [[${k_lb}${ParameterName}${k_rb}]]
+Operation _switch [ kp_switch  Operand  @Case  kp_end  k_switch  Operand ] = [[${kp_switch}${Operand}${Case}${kp_end}${k_switch}${Operand}]]
+_call [ kp_call  Operand  ObjectArray ] = [[${kp_call}${Operand}${ObjectArray}]]
+_overwrite [ kp_overwrite  Operand  Operand ] = [[${kp_overwrite}${Operand}${Operand}]]
+_map [ kp_map  Operand ] = [[${kp_map}${Operand}]]
+_cond [ kp_cond  @CondClause  CondElse  kp_end  k_cond ] = [[${kp_cond}${CondClause}${CondElse}${kp_end}${k_cond}]]
+_yield [ kp_yield ] = [[${kp_yield}]]
+_scope [ kp_scope  LocalName  Expression  @Operation  kp_end  k_scope  LocalName ] = [[${kp_scope}${LocalName}${Expression}${Operation}${kp_end}${k_scope}${LocalName}]]
+Module  [ kp_module  ModuleName  Prototype  @Function  kp_end  k_module  ModuleName ] = [[${kp_module}${ModuleName}${Prototype}${Function}${kp_end}${k_module}${ModuleName}]]
+Function  [ kp_function  FunctionName  Args  @Operation  kp_end  k_function  FunctionName ] = [[${kp_function}${FunctionName}${Args}${Operation}${kp_end}${k_function}${FunctionName}]]
+Prototype  [ kp_prototype  PrototypeName  @PersistentFieldDecl  ConstructorDecl  kp_end  k_prototype  PrototypeName ] = [[${kp_prototype}${PrototypeName}${PersistentFieldDecl}${ConstructorDecl}${kp_end}${k_prototype}${PrototypeName}]]
+PersistentFieldDecl  [ kp_persistent  FieldPrototypeName  Operand ] = [[${kp_persistent}${FieldPrototypeName}${Operand}]]
+ConstructorDecl  [ kp_constructor  k_lb  k_self  k_rb  @Operation  kp_end  k_constructor ] = [[${kp_constructor}${k_lb}${k_self}${k_rb}${Operation}${kp_end}${k_constructor}]]
+Case  [ kp_case  SymbolName  @Operation  kp_end  k_case  SymbolName ] = [[${kp_case}${SymbolName}${Operation}${kp_end}${k_case}${SymbolName}]]
+CondClause  [ kp_condif  Operand  ObjectArray  @Operation  kp_end  k_condif  Operand ] = [[${kp_condif}${Operand}${ObjectArray}${Operation}${kp_end}${k_condif}${Operand}]]
+CondElse  [ kp_condelse  @Operation  kp_end  k_condelse ] = [[${kp_condelse}${Operation}${kp_end}${k_condelse}]]
+Expression _cons [ kp_cons  ObjectArray ] = [[${kp_cons}${ObjectArray}]]
+_simple [ Operand ] = [[${Operand}]]
+Args  [ k_lb  @ParameterName  k_rb ] = [[${k_lb}${ParameterName}${k_rb}]]
+}
 
 
-Main 
- [ Module ] = [[${Module}]]
+Toolbox<:Operators{
+
+
+Main  [ Module ] = [[${Module}]]
+}
 
 
 
