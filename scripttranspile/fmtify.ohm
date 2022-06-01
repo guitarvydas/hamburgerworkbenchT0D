@@ -14,9 +14,12 @@ items = item+
   
 item = singleItem ws
 singleItem =
-  | singleItem "+" -- plus
-  | singleItem "*" -- star
-  | singleItem "?" -- q
+  | name ws "+" -- plus
+  | name ws "*" -- star
+  | name ws "?" -- q
+  | singleItem "+" -- recplus
+  | singleItem "*" -- recstar
+  | singleItem "?" -- recq
   | "(" ws item+ ")" ws -- nested
   | name ws ".." ws name -- range
   | "~" ws singleItem -- not

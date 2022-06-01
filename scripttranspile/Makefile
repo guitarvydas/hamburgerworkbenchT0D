@@ -80,3 +80,7 @@ fmtify:
 	python stringrepl.py <toolbox.ohm \
 	| tee /tmp/toolbox.destring \
 	| ${prep} '.' '$$' fmtify.ohm fmtify.fmt --fmt=${cwd}/fmt.js --stop=1 
+devfmtify:
+	python stringrepl.py <test.ohm \
+	| tee /tmp/toolbox.destring \
+	| ${prep} '.' '$$' fmtify.ohm fmtify.fmt --fmt=${cwd}/fmt.js --stop=1 

@@ -44,19 +44,19 @@ Names <: Basics {
 
 Operands <: Names {
   Operand =
-    | Undefined
-    | ObjectConstructor
-    | SymbolName
-    | Dotted
-    | ParameterName
-    | LocalName
-    | FunctionName
-    | CompoundObject
-    | string
-    | number
-    | verbatim
-    | "%yes"
-    | "%no"
+    | Undefined -- undefined
+    | ObjectConstructor -- constructor
+    | SymbolName -- symbol
+    | Dotted -- dotted
+    | ParameterName -- parameter
+    | LocalName -- local
+    | FunctionName -- function
+    | CompoundObject -- compound
+    | string -- string
+    | number -- number
+    | verbatim -- verbatim
+    | "%yes" -- yes
+    | "%no" -- no
 
   ObjectConstructor = "@" Name
   Undefined = "-"

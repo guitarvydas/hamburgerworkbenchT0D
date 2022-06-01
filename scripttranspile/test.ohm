@@ -1,0 +1,8 @@
+Junk <: Operators {
+   Args1 = "[" P? "]"
+   Args2 = "[" P+ "]"
+   Args = "[" P* "]"
+  Main := Module
+}
+
+

@@ -27,7 +27,7 @@ exports.args = function () {
 exports.fmts = function () {
     var result = "";
     fmtarray.forEach (s => {
-	result += ` ${s} `;
+	result += `${s}`;
     });
     return result;
 }
