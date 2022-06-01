@@ -71,7 +71,12 @@ destring:
 	python stringrepl.py <toolbox.ohm \
 	> /tmp/toolbox.destring
 
-fmtify:
+identity-fmtify:
 	python stringrepl.py <toolbox.ohm \
 	| tee /tmp/toolbox.destring \
 	| ${prep} '.' '$$' fmtify.ohm identity-fmtify.fmt --stop=1 
+
+fmtify:
+	python stringrepl.py <toolbox.ohm \
+	| tee /tmp/toolbox.destring \
+	| ${prep} '.' '$$' fmtify.ohm fmtify.fmt --fmt=${cwd}/fmt.js --stop=1 
