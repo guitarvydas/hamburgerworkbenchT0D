@@ -3,8 +3,8 @@ import re
 import urllib.parse
 
 for line in sys.stdin:
-    if (re.search (r'"$"',line)):
-        line = re.sub (r'"$"', 'k_dollar', line)
+    if (re.search (r'"\$"',line)):
+        line = re.sub (r'"\$"', 'k_dollar', line)
 
     if (re.search (r'"%call"',line)):
         line = re.sub (r'"%call"', 'kp_call', line)
@@ -87,8 +87,8 @@ for line in sys.stdin:
     if (re.search (r'"\["',line)):
         line = re.sub (r'"\["', 'k_lb', line)
 
-    if (re.search (r'"\""',line)):
-        line = re.sub (r'"\""', 'k_dq', line)
+    if (re.search (r'"\\""',line)):
+        line = re.sub (r'"\\""', 'k_dq', line)
 
     if (re.search (r'"\]"',line)):
         line = re.sub (r'"\]"', 'k_rb', line)

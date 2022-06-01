@@ -67,11 +67,11 @@ strings:
 	${prep} '.' '$$' strings.ohm strings.fmt --stop=1 <toolbox.ohm | sort | uniq
 	# now, edit the result to manually make stringrepl.py
 
-munge:
-	python stringrepl.py <toolbox.ohm \
-	> /tmp/toolbox.munge
-
 destring:
 	python stringrepl.py <toolbox.ohm \
-	| tee /tmp/toolbox.munge \
+	> /tmp/toolbox.destring
+
+fmtify:
+	python stringrepl.py <toolbox.ohm \
+	| tee /tmp/toolbox.destring \
 	| ${prep} '.' '$$' fmtify.ohm identity-fmtify.fmt --stop=1 

@@ -1,0 +1,37 @@
+main [@grammar] = [[${grammar}]]
+
+grammar [ws1 name ws2 @inherit lb eol @rules rb @eol] = [[${ws1}${name}${ws2}${inherit}${lb}${eol}${rules}${rb}${eol}]]
+
+inherit [k ws1 name ws2] = [[${k}${ws1}${name}${ws2}]]
+
+rule [name ws1 @doc eq ws2 @eol @branch] = [[${name}${ws1}${doc}${eq}${ws2}${eol}${branch}]]
+
+doc [lp ws1 name ws2 rp ws3] = [[${lp}${ws1}${name}${ws2}${rp}${ws3}]]
+
+branch_or [k ws items @branchName eob] = [[${k}${ws}${items}${branchName}${eob}]]
+branch_single [items @branchName eob] = [[${items}${branchName}${eob}]]
+
+items [@items] = [[${items}]]
+  
+item [singleItem ws] = [[${singleItem}${ws}]]
+
+singleItem_plus [singleItem k] = [[${singleItem}${k}]]
+singleItem_star [singleItem k] = [[${singleItem}${k}]]
+singleItem_q [singleItem k] = [[${singleItem}${k}]]
+singleItem_nested [lp ws1 @items rp ws2] = [[${lp}${ws1}${items}${rp}${ws2}]]
+singleItem_range [name1 ws1 k ws2 name2] = [[${name1}${ws1}${k}${ws2}${name2}]]
+singleItem_not [k ws singleItem] = [[${k}${ws}${singleItem}]]
+singleItem_name [name ws] = [[${name}${ws}]]
+
+branchName [k ws name] = [[${k}${ws}${name}]]
+name [id1 @idr] = [[${id1}${idr}]]
+idfirst [c] = [[${c}]]
+idrest [c] = [[${c}]]
+
+
+nl [c] = [[${c}]]
+spc [c] = [[${c}]]
+ws [@cs] = [[${cs}]]
+
+eol [nl @x] = [[${nl}${x}]]
+eob [x] = [[${x}]]
