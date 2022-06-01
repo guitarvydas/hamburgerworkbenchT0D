@@ -1,17 +1,26 @@
 fmtify {
+main = grammar+
+grammar = ws name ws inherit? "{" eol rule+ "}" eol?
+inherit = "<:" ws name ws
+rule = name ws doc? (":=" | "=") ws eol? branch+
+
+doc = "(" ws name ws ")" ws
+
 branch =
-  | "|" ws item+ branchName? eob -- or
-  | item+ branchName? eob -- single
+  | "|" ws items branchName? eob -- or
+  | items branchName? eob -- single
 
-
-item = singleItem ws*
+items = item+
+  
+item = singleItem ws
 singleItem =
-  | name ws "+" -- plus
-  | name ws "*" -- star
-  | name ws "?" -- q
-  | name ws ".." name -- range
-  | "~" ws name -- not
-  | name
+  | singleItem "+" -- plus
+  | singleItem "*" -- star
+  | singleItem "?" -- q
+  | "(" ws item+ ")" ws -- nested
+  | name ws ".." ws name -- range
+  | "~" ws singleItem -- not
+  | name ws -- name
 branchName = "--" ws name
 name = idfirst idrest*
 idfirst = letter
@@ -19,9 +28,10 @@ idrest = alnum | "_"
 
 
 nl = "\n"
-ws = " "
+spc = " "
+ws = spc*
 
 // end of branch
-eol = nl (ws | nl)*
+eol = nl (spc | nl)*
 eob = eol
 }
