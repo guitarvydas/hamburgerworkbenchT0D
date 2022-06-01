@@ -1,0 +1,6 @@
+main [@stuffAndString @stuff] = [[${stuffAndString}${stuff}]]
+stuffAndString [@stuff @string] = [[${stuff}${string}]]
+string [dq1 @stuff dq2] = [[${dq1}${stuff}${dq2}]]
+dq [c] = [[${c}]]
+stuff_esc [bs dq] = [[${bs}${dq}]]
+stuff_other [c] = [[${c}]]

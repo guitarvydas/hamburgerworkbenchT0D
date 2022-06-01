@@ -1,0 +1,27 @@
+fmtify {
+branch =
+  | "|" ws item+ branchName? eob -- or
+  | item+ branchName? eob -- single
+
+
+item = singleItem ws*
+singleItem =
+  | name ws "+" -- plus
+  | name ws "*" -- star
+  | name ws "?" -- q
+  | name ws ".." name -- range
+  | "~" ws name -- not
+  | name
+branchName = "--" ws name
+name = idfirst idrest*
+idfirst = letter
+idrest = alnum | "_"
+
+
+nl = "\n"
+ws = " "
+
+// end of branch
+eol = nl (ws | nl)*
+eob = eol
+}

@@ -1,0 +1,10 @@
+strings {
+main = stuffAndString+ stuff*
+stuffAndString = stuff+ string+
+string = dq stuff+ dq
+dq = "\""
+stuff = 
+  | "\\" dq -- esc
+  | ~dq any -- other
+}
+

@@ -1,12 +1,15 @@
 Basics {
   Main = Name+
   Name (Name) = firstletter followletter*
-  firstletter = idletter | "_"
-  followletter = digit | firstletter
+  firstletter = idletter 
+    | "_"
+  followletter = digit 
+    | firstletter
 
-  idletter = "A" .."Z" | "a" .. "z"
+  idletter = "A" .."Z" 
+    | "a" .. "z"
 
-  verbatim =     | "❮" verbatiminnards "❯"
+  verbatim = "❮" verbatiminnards "❯"
 
   verbatiminnards =
     | "❮" verbatiminnards "❯" -- rec
@@ -14,7 +17,8 @@ Basics {
 
   stuff = ~vsep any
   vsep = bracket
-  bracket = "❮" | "❯" 
+  bracket = "❮" 
+   | "❯" 
 
   string = 
     | sq (~sq any)* sq
@@ -56,13 +60,17 @@ Operands <: Names {
 
   ObjectConstructor = "@" Name
   Undefined = "-"
-  CompoundObject = ObjectArray | Dict
+  CompoundObject = ObjectArray 
+    | Dict
   ObjectArray = "[" Operand* "]"
   Dict = "{" KeyOperandPair* "}"
   KeyOperandPair = Key Operand
   Key = SymbolName
   Dotted = Operand "." Field
-  Field = FunctionName | ParameterName | LocalName | FieldName
+  Field = FunctionName 
+    | ParameterName 
+    | LocalName 
+    | FieldName
 }
 
 Operators <: Operands {
@@ -75,12 +83,12 @@ Operators <: Operands {
     | "%yield" -- yield
     | "%scope" LocalName Expression Operation+ "%end" "scope" LocalName -- scope
 
-   Module = "%module" ModuleName Prototype Function+ "%end" "module" ModuleName -- module
-   Function = "%function" FunctionName Args Operation* "%end" "function" FunctionName -- function
+   Module = "%module" ModuleName Prototype Function+ "%end" "module" ModuleName
+   Function = "%function" FunctionName Args Operation* "%end" "function" FunctionName
    Prototype = "%prototype" PrototypeName PersistentFieldDecl+ ConstructorDecl "%end" "prototype" PrototypeName
    PersistentFieldDecl = "%persistent" FieldPrototypeName Operand
    ConstructorDecl = "%constructor" "[" "▹self" "]" Operation* "%end" "constructor"
-   Case = "%case" SymbolName Operation+ "%end" "case" SymbolName  -- case
+   Case = "%case" SymbolName Operation+ "%end" "case" SymbolName
    CondClause = "%condif" Operand ObjectArray Operation+ "%end" "condif" Operand
    CondElse = "%condelse" Operation+ "%end" "condelse"
    Expression =
