@@ -31,6 +31,7 @@ next: next.ohm next.fmt fmt.js foreach.hsm
 	${prep} '☞' '\n' next.ohm next.fmt ${support} <foreach.hsm
 
 # foreach.mdsm -> foreach.sm
+# transpile markdown-sm to .sm (structured, CFG)
 foreach.sm: foreach.mdsm send.ohm send.fmt next.ohm next.fmt mdsm.ohm mdsm.fmt
 	cat foreach.mdsm \
 	| ${prep} '```' '```' verbatim3.ohm verbatim.fmt --inclusive ${support} \
@@ -42,6 +43,7 @@ foreach.sm: foreach.mdsm send.ohm send.fmt next.ohm next.fmt mdsm.ohm mdsm.fmt
 	| cat -
 
 # foreach.mdsm -> foreach.sm -> foreach.toolbox
+# transpile .sm state machine to toolbox code (like pseudo-code)
 foreach.pseudo.sm: foreach.sm
 	cat foreach.sm \
 	| ${prep} '.' '$$' sm.ohm sm.pseudo.fmt ${support} --stop=1 \

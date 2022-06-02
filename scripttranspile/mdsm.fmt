@@ -6,12 +6,22 @@ Decls [k1 k2 @Code] = [[\n%decls\n${Code}\n%enddecls\n]]
 
 State [k1 k2 StateName @Code @Transitions] = [[\n%state ${StateName} \n${Code}${Transitions}\n%endstate\n]]
 
+StatePhase [x] = [[${x}]]
+
+StateEntry [k1 k2 k3 k_e @Code] = [[${k1}${k2}${k3}${k_e}${Code}]]
+
+StateExit [k1 k2 k3 k_e @Code] = [[${k1}${k2}${k3}${k_e}${Code}]]
+
 Transition [k1 k2 k3 TransitionName @Body] = [[\n%on ${TransitionName} \n${Body}\n%endon\n]]
 
 Code_send [op port v] = [[%send ${port} ${v}]]
 Code_proceedto [op Name] = [[%go ${Name}]]
 Code_nextstate [op Name] = [[%next ${Name}]]
 Code_raw [v] = [[${v}]]
+
+Cond [k1 k2 k3 k4 k_cond verbatim YesSection NoSection] = [[${k1}${k2}${k3}${k4}${k_cond}${verbatim}${YesSection}${NoSection}]]
+YesSection [k1 k2 k3 k4 k5 k @Code] = [[${k1}${k2}${k3}${k4}${k5}${k}${Code}]]
+NoSection [k1 k2 k3 k4 k5 k @Code] = [[${k1}${k2}${k3}${k4}${k5}${k}${Code}]]
 
 Port [Name] = [[${Name}]]
 

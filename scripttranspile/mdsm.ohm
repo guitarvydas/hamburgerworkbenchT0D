@@ -4,7 +4,15 @@ Header = "#" "machine" Name
 
 Decls = "#" "#" verbatim+
 
-State = "#" "#" StateName Code* Transition*
+State = "#" "#" StateName Code* StatePhase+
+
+StatePhase = StateEntry | StateExit | Transition
+
+StateEntry =
+  | "#" "#" "#" "_enter_" Code+
+
+StateExit =
+  | "#" "#" "#" "_exit_" Code+
 
 Transition =
   | "#" "#" "#" TransitionName Code+
@@ -13,8 +21,13 @@ Code =
   | "_send_" Port verbatim -- send
   | "_go_" Name -- proceedto
   | "_next_" Name -- nextstate
+  | Cond -- cond
   | verbatim          -- raw
   
+Cond = "#" "#" "#" "#" "cond" verbatim YesSection NoSection
+YesSection = "#" "#" "#" "#" "#" "*yes*" Code+
+NoSection = "#" "#" "#" "#" "#" "*no*" Code+
+
 Port = Name
 
 verbatim =

@@ -67,10 +67,10 @@ Operands <: Names {
   KeyOperandPair = Key Operand
   Key = SymbolName
   Dotted = Operand "." Field
-  Field = FunctionName 
-    | ParameterName 
-    | LocalName 
-    | FieldName
+  Field = FunctionName -- function
+    | ParameterName -- parameter
+    | LocalName -- local
+    | FieldName -- field
 }
 
 Operators <: Operands {
